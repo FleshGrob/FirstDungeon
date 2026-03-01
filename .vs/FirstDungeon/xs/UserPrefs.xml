@@ -1,0 +1,37 @@
+﻿<Properties StartupConfiguration="{4BBA4EB9-0C8B-C839-2C57-78B95767E894}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/FirstDungeon/Scripts/PlayerScripts/PlayerMovement.cs">
+    <Files>
+      <File FileName="Assets/Ring.cs" Line="45" Column="44" />
+      <File FileName="Assets/RingManager.cs" Line="14" Column="1" />
+      <File FileName="Assets/FirstDungeon/Scripts/ObjectsScripts/FrogProjectile.cs" Line="24" Column="1" />
+      <File FileName="Assets/FirstDungeon/Scripts/PlayerScripts/PlayerMovement.cs" Line="21" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="FirstDungeon" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="FirstDungeon" expanded="True">
+                <Node name="Scripts" expanded="True">
+                  <Node name="ObjectsScripts" expanded="True" />
+                  <Node name="OtherScripts" expanded="True" />
+                  <Node name="PlayerScripts" expanded="True">
+                    <Node name="PlayerMovement.cs" selected="True" />
+                  </Node>
+                  <Node name="PuzzleScripts" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6df2cf4d-b308-447d-be0f-2d081760b819" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

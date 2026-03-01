@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Box
+  - Dark
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Player
+  - Water
+  - UI
+  - Enemy
+  - PlayerProjectile
+  - EnemyProjectile
+  - Interactable
+  - Pushable
+  - Solid
+  - Trigger
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 3074037635
+    locked: 0
+  - name: Walls
+    uniqueID: 2139507557
+    locked: 0
+  - name: Objects
+    uniqueID: 2739678975
+    locked: 0
+  - name: Characters
+    uniqueID: 1150972455
+    locked: 0

@@ -1,0 +1,36 @@
+﻿<Properties StartupConfiguration="{B313D896-9A4F-9BE4-FD9D-CB4DCB063589}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/FrogProjectUnityFolder/Scripts/OtherScripts/FrogProjectile.cs">
+    <Files>
+      <File FileName="Assets/FrogProjectUnityFolder/Scripts/PlayerScripts/PlayerMovement.cs" Line="14" Column="1" />
+      <File FileName="Assets/FrogProjectUnityFolder/Scripts/PuzzleScripts/DoorController.cs" />
+      <File FileName="Assets/FrogProjectUnityFolder/Scripts/PuzzleScripts/BoxTrigger.cs" />
+      <File FileName="Assets/FrogProjectUnityFolder/Scripts/ObjectsScripts/Chest.cs" />
+      <File FileName="Assets/FrogProjectUnityFolder/Scripts/OtherScripts/FrogProjectile.cs" Line="7" Column="22" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Frog project" expanded="True">
+            <Node name="Assets" expanded="True" selected="True">
+              <Node name="FrogProjectUnityFolder" expanded="True">
+                <Node name="Scripts" expanded="True">
+                  <Node name="ObjectsScripts" expanded="True" />
+                  <Node name="OtherScripts" expanded="True" />
+                  <Node name="PlayerScripts" expanded="True" />
+                  <Node name="PuzzleScripts" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="5d063542-e5cd-4712-807c-e76e5cece24c" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
