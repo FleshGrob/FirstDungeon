@@ -113,7 +113,7 @@ public class PlayerBoxGrabPull : MonoBehaviour
         {
             Vector2 stepDir = -grabDir;
 
-            float alongVel = Vector2.Dot(movement.rb.velocity, grabDir);
+            float alongVel = Vector2.Dot(movement.Rb.velocity, grabDir);
 
             if (alongVel < 0f)
             {

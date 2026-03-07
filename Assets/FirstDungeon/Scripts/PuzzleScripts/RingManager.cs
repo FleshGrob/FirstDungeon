@@ -9,6 +9,7 @@ public class RingManager : MonoBehaviour
     [SerializeField] Transform chestSpawnPos;
 
     public int rightID { get; private set; } = 0;
+    public bool Solved { get; private set; } = false;
     FrogProjectile frog;
 
 
@@ -19,15 +20,15 @@ public class RingManager : MonoBehaviour
         frog.OnDeath += Fail;
     }
 
-    public bool Solved()
+    public void CheckHit()
     {
        foreach(Ring r in rings)
        {
             if (r.Activated == false)
-                return false;
+                return;
        }
+        Solved = true;
         Instantiate(chestPrefab, chestSpawnPos.position, Quaternion.identity);
-        return true; 
     }
 
     public void Reset()
@@ -43,7 +44,7 @@ public class RingManager : MonoBehaviour
     void Fail(bool death)
     {
         frog.OnDeath -= Fail;
-        if (Solved() == false)
+        if (Solved == false)
         {
             Reset();
         }

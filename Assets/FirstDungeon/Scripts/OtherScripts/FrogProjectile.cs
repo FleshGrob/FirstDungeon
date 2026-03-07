@@ -37,8 +37,7 @@ public class FrogProjectile : MonoBehaviour
         if (other.GetComponent<Mirror>() != null) return;
         if (other.GetComponent<Ring>() != null) return;
         death = true;
-        Destroy(gameObject);
-        
+        Destroy(gameObject);  
     }
 
     public void Reflection (Vector2 newDir)

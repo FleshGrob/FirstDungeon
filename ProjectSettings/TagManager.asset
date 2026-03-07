@@ -20,7 +20,7 @@ TagManager:
   - Pushable
   - Solid
   - Trigger
-  - 
+  - Bog
   - 
   - 
   - 
@@ -45,6 +45,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 3074037635
+    locked: 0
+  - name: Bog
+    uniqueID: 1470450265
     locked: 0
   - name: Walls
     uniqueID: 2139507557

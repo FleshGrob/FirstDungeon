@@ -20,7 +20,7 @@ public class ChaosTarget : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         FrogProjectile frog = other.GetComponent<FrogProjectile>();
-        if (frog.Dark == true)
+        if (frog != null && frog.Dark == true)
             Hit();
     }
 

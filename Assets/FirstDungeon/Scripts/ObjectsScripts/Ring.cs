@@ -34,7 +34,7 @@ public class Ring : MonoBehaviour
     {
         if (manager == null)
             return;
-        if (manager.Solved() == true)
+        if (manager.Solved == true)
             return;
         if (manager.rightID == 0)
         {
@@ -46,7 +46,7 @@ public class Ring : MonoBehaviour
         {
             Activated = true;
             sr.color = hitColor;
-            manager.Solved();
+            manager.CheckHit();
         }
         else
         {
