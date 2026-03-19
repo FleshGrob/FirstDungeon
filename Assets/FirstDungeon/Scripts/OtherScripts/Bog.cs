@@ -5,18 +5,19 @@ namespace FirstDungeon.Scripts.OtherScripts
 {
     public class Bog : MonoBehaviour
     {
-        [SerializeField] int _damage;
-        [SerializeField] float _drownTime;
-        [SerializeField] float _stunTime;
-        
         Collider2D _bogCol;
         PlayerMovement _playerMovement;
         IDamageable _damageable;
+        
+        readonly int _damage = 1;
+        readonly float _drownTime = 1;
+        float _stunTime;
         
         
         void Awake()
         {
             _bogCol = GetComponent<Collider2D>();
+            _stunTime = _drownTime;
         }
 
         void OnTriggerEnter2D(Collider2D other)
