@@ -1,30 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorController : MonoBehaviour
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    Collider2D doorCollider;
-    SpriteRenderer spriteRenderer;
-    public Sprite openedSprite;
-    public Sprite closedSprite;
-
-
-    void Awake()
+    public class DoorController : MonoBehaviour
     {
-        doorCollider = GetComponent<Collider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+        [SerializeField] Sprite _openedSprite;
+        [SerializeField] Sprite _closedSprite;
+        
+        Collider2D _doorCol;
+        SpriteRenderer _sr;
 
-    public void OpenDoor()
-    {
-        doorCollider.enabled = false;
-        spriteRenderer.sprite = openedSprite;
-    }
 
-    public void CloseDoor()
-    {
-        doorCollider.enabled = true;
-        spriteRenderer.sprite = closedSprite;
+        void Awake()
+        {
+            _doorCol = GetComponent<Collider2D>();
+            _sr = GetComponent<SpriteRenderer>();
+        }
+
+        public void OpenDoor()
+        {
+            _doorCol.enabled = false;
+            _sr.sprite = _openedSprite;
+        }
+
+        public void CloseDoor()
+        {
+            _doorCol.enabled = true;
+            _sr.sprite = _closedSprite;
+        }
     }
 }

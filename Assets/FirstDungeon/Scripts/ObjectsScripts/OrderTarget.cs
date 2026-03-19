@@ -1,45 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PuzzleScripts;
 using UnityEngine;
 
-public class OrderTarget : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-
-    [SerializeField] OTManager manager;
-    [SerializeField] Color idleColor;
-    [SerializeField] Color correctColor;
-
-    FrogProjectile frog;
-    SpriteRenderer sr;
-
-
-    void Start()
+    public class OrderTarget : MonoBehaviour
     {
-        sr = GetComponent<SpriteRenderer>();
-        sr.color = idleColor;
-    }
+        OTManager _manager;
+        SpriteRenderer _sr;
+        Color _idleColor;
 
-    public void Hit()
-    {
-        if (manager == null)
-            return;
-        manager.OnTargetHit(this);
-    }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        frog = collision.GetComponent<FrogProjectile>();
-        if (frog != null)
-            Hit();
-    }
+        void Awake()
+        {
+            _sr = GetComponent<SpriteRenderer>();
+            _manager = GetComponentInParent<OTManager>();
+            _idleColor = _sr.color;
+        }
+        
+        void OnTriggerEnter2D(Collider2D collision)
+        {
+            FrogProjectile frogProjectile = collision.GetComponent<FrogProjectile>();
+            if (frogProjectile != null)
+                Hit();
+        }
 
-    public void SetIdle()
-    {
-        sr.color = idleColor;
-    }
+        void Hit()
+        {
+            _manager.OnTargetHit(this);
+        }
+        
+        public void SetIdle()
+        {
+            _sr.color = _idleColor;
+        }
 
-    public void SetCorrect()
-    {
-        sr.color = correctColor;
+        public void SetActive()
+        {
+            _sr.color = _manager.ActiveColor;
+        }
     }
 }

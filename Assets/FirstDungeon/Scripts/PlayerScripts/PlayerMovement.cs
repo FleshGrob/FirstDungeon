@@ -1,60 +1,62 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace FirstDungeon.Scripts.PlayerScripts
 {
-    [SerializeField] float speed = 4f;
-
-    public Rigidbody2D Rb { get; private set; }
-    public Vector2 SafePos;
-    Vector2 input;
-    Vector2 facing = Vector2.down;
-
-    public Vector2 Facing => facing;
-    public Vector2 InputRaw => input;
-
-    void Awake()
+    public class PlayerMovement : MonoBehaviour
     {
-        Rb = GetComponent<Rigidbody2D>();
-    }
+        [SerializeField] float _speed;
+        
+        Vector2 _movementInput;
+        
+        public Vector2 MovementInputRaw => _movementInput;
+        public Vector2 Facing { get; private set; } = Vector2.down;
+        public Rigidbody2D Rb { get; private set; }
+        public Vector2 SafePosition { get; private set; }
+        
 
-    void Update()
-    {
-        input.x = Input.GetAxisRaw("Horizontal");
-        input.y = Input.GetAxisRaw("Vertical");
-
-        float ax = Mathf.Abs(input.x);
-        float ay = Mathf.Abs(input.y);
-
-        if (ax > ay) facing = input.x > 0 ? Vector2.right : Vector2.left;
-        else if (ay > ax) facing = input.y > 0 ? Vector2.up : Vector2.down;
-
-        if (!PlayerState.Instance.InBog) SafePos = Rb.position;
-    }
-
-    void FixedUpdate()
-    {
-        if (PlayerState.Instance.IsStunned)
+        void Awake()
         {
-            Rb.velocity = Vector2.zero;
-            return;
+            Rb = GetComponent<Rigidbody2D>();
         }
 
-        Rb.velocity = speed * input.normalized;
-    }
-
-    public void Drown(float time) => StartCoroutine(Drowning(time));
-
-    IEnumerator Drowning (float time)
-    {
-        float t = 0f;
-        while (t < time)
+        void Update()
         {
-            t += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-        Rb.position = SafePos;
-        PlayerState.Instance.SetInBog(false);
-    }
+            _movementInput.x = Input.GetAxisRaw("Horizontal");
+            _movementInput.y = Input.GetAxisRaw("Vertical");
 
+            float ax = Mathf.Abs(_movementInput.x);
+            float ay = Mathf.Abs(_movementInput.y);
+
+            if (ax > ay) Facing = _movementInput.x > 0 ? Vector2.right : Vector2.left;
+            else if (ay > ax) Facing = _movementInput.y > 0 ? Vector2.up : Vector2.down;
+
+            if (!PlayerState.Instance.InBog) SafePosition = Rb.position;
+        }
+
+        void FixedUpdate()
+        {
+            if (PlayerState.Instance.IsStunned)
+            {
+                Rb.velocity = Vector2.zero;
+                return;
+            }
+
+            Rb.velocity = _speed * _movementInput.normalized;
+        }
+
+        public void Drown(float drowningTime) => StartCoroutine(DrownRoutine(drowningTime));
+
+        IEnumerator DrownRoutine(float drowningTime)
+        {
+            float t = 0f;
+            while (t < drowningTime)
+            {
+                t += Time.deltaTime;
+                yield return null;
+            }
+            Rb.position = SafePosition;
+            PlayerState.Instance.SetInBog(false);
+        }
+    }
 }

@@ -1,49 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PuzzleScripts;
 using UnityEngine;
 
-public class ColorTarget : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-
-    [SerializeField] CTManager manager;
-    public bool IsGreen => colorIndex == manager.GreenIndex;
-
-    int colorIndex;
-    SpriteRenderer sr;
-    FrogProjectile frog;
-
-
-    private void Awake()
+    public class ColorTarget : MonoBehaviour
     {
-        sr = GetComponent<SpriteRenderer>();
-    }
+        CTManager _manager;
+        SpriteRenderer _spriteRenderer;
+        int _colorIndex;
 
-    public void Hit()
-    {
-        if (manager == null)
-            return;
-        if (manager.IsSolved == true)
-            return;
-        AdvanceColor();
-        ApplyColor();
-        manager.OnTargetHit();
+        public bool IsRightColor => _colorIndex == _manager.RightColorIndex;
 
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        frog = collision.GetComponent<FrogProjectile>();
-        if (frog != null)
-            Hit();
-    }
+        void Awake()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _manager = GetComponentInParent<CTManager>();
+            _colorIndex = _manager.CycleColors.Length - 1;
+        }
 
-    void AdvanceColor()
-    {
-        colorIndex = (colorIndex + 1) % manager.CycleColors.Length;
-    }
+        void OnTriggerEnter2D(Collider2D collision)
+        {
+            FrogProjectile frogProjectile = collision.GetComponent<FrogProjectile>();
+            if (frogProjectile != null)
+                Hit();
+        }
+        
+        void Hit()
+        {
+            if (_manager.IsSolved)
+                return;
+            AdvanceColor();
+            ApplyColor();
+            _manager.OnTargetHit();
+        }
+        
+        void AdvanceColor()
+        {
+            _colorIndex = (_colorIndex + 1) % _manager.CycleColors.Length;
+        }
 
-    void ApplyColor()
-    {
-        sr.color = manager.CycleColors[colorIndex];
+        void ApplyColor()
+        {
+            _spriteRenderer.color = _manager.CycleColors[_colorIndex];
+        }
     }
 }

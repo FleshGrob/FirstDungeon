@@ -1,53 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.ObjectsScripts;
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
-public class RingManager : MonoBehaviour
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    [SerializeField] Ring[] rings;
-    [SerializeField] GameObject chestPrefab;
-    [SerializeField] Transform chestSpawnPos;
-
-    public int rightID { get; private set; } = 0;
-    public bool Solved { get; private set; } = false;
-    FrogProjectile frog;
-
-
-    public void GetFrog(int frogID, FrogProjectile fr)
+    public class RingManager : MonoBehaviour
     {
-        frog = fr;
-        rightID = frogID;
-        frog.OnDeath += Fail;
-    }
+        [SerializeField] Color _activeColor;
+        [SerializeField] GameObject _chestPrefab;
+        [SerializeField] Transform _chestSpawnPos;
+        
+        FrogProjectile _frogProjectile;
+        Ring[] _rings;
 
-    public void CheckHit()
-    {
-       foreach(Ring r in rings)
-       {
-            if (r.Activated == false)
-                return;
-       }
-        Solved = true;
-        Instantiate(chestPrefab, chestSpawnPos.position, Quaternion.identity);
-    }
+        public Color ActiveColor => _activeColor;
+        public int RightID { get; private set; }
+        public bool IsSolved { get; private set; }
 
-    public void Reset()
-    {
-        rightID = 0;
-        foreach (Ring r in rings)
+
+        void Awake()
         {
-            r.Activated = false;
-            r.sr.color = r.originalColor;
+            _rings = GetComponentsInChildren<Ring>();
         }
-    }
 
-    void Fail(bool death)
-    {
-        frog.OnDeath -= Fail;
-        if (Solved == false)
+        public void GetFrog(int frogID, FrogProjectile frog)
         {
-            Reset();
+            _frogProjectile = frog;
+            RightID = frogID;
+            _frogProjectile.OnDisposed += Fail;
         }
-        else return;
+
+        public void CheckHit()
+        {
+            foreach(Ring r in _rings)
+            {
+                if (!r.IsActivated)
+                    return;
+            }
+            Solve();
+        }
+
+        public void Restart()
+        {
+            RightID = 0;
+            foreach (Ring r in _rings)
+            {
+                r.Cancel();
+            }
+        }
+
+        void Fail()
+        {
+            _frogProjectile.OnDisposed -= Fail;
+            if (!IsSolved)
+            {
+                Restart();
+            }
+        }
+        
+        void Solve()
+        {
+            IsSolved = true;
+            Instantiate(_chestPrefab, _chestSpawnPos.position, Quaternion.identity);
+        }
     }
 }

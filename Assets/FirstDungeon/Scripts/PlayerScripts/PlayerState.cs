@@ -1,35 +1,43 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerState : MonoBehaviour
+namespace FirstDungeon.Scripts.PlayerScripts
 {
-    public static PlayerState Instance { get; private set; }
-    public bool IsStunned { get; private set; }
-    public bool InBog { get; private set; }
-    public bool IsAlive { get; private set; } = true;
-
-    void Awake()
+    public class PlayerState : MonoBehaviour
     {
-        Instance = this;
-    }
+        public static PlayerState Instance { get; private set; }
+        public bool IsStunned { get; private set; }
+        public bool InBog { get; private set; }
+        public bool IsAlive { get; private set; } = true;
 
-    public void SetInBog(bool value) => InBog = value;
-
-    public void Stun(float time) => StartCoroutine(Stunned(time));
-
-    IEnumerator Stunned(float time)
-    {
-        IsStunned = true;
-
-        float t = 0f;
-        while (t < time)
+        void Awake()
         {
-            t += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
         }
 
-        IsStunned = false;
-    }
+        public void SetInBog(bool value) => InBog = value;
 
-    public void Death() => IsAlive = false;
+        public void Stun(float time) => StartCoroutine(StunRoutine(time));
+
+        IEnumerator StunRoutine(float time)
+        {
+            IsStunned = true;
+
+            float t = 0f;
+            while (t < time)
+            {
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            IsStunned = false;
+        }
+
+        public void Die() => IsAlive = false;
+    }
 }

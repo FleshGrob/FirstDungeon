@@ -1,49 +1,52 @@
-using System;
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
-public class PlayerShooter : MonoBehaviour
+namespace FirstDungeon.Scripts.PlayerScripts
 {
-    [SerializeField] float projectileSpeed = 7;
-    public float ProjectileSpeed => projectileSpeed;
-    float spawnOffset = 0.6f;
-
-    public bool CanShoot;
-    public event Action<bool> OnCanShootChanged;
-
-    PlayerMovement movement;
-    public GameObject projectilePrefab;
-
-
-    public void UnlockFrogStaff()
+    public class PlayerShooter : MonoBehaviour
     {
-        if (CanShoot) return; 
+        [SerializeField] FrogProjectile _projectilePrefab;
+        [SerializeField] float _projectileSpeed = 7;
+        [SerializeField] bool _canShoot;
+        
+        PlayerMovement _playerMovement;
+        const float SpawnOffset = 0.6f;
 
-        CanShoot = true;
-        OnCanShootChanged?.Invoke(CanShoot);
-    }
 
-    void Start()
-    {
-        movement = GetComponent<PlayerMovement>();
-    }
+        void Awake()
+        {
+            _playerMovement = GetComponent<PlayerMovement>();
+        }
 
-    void Update()
-    {
-        if (!Input.GetKeyDown(GameKeys.Shoot) || PlayerState.Instance.IsStunned)
-            return;
-        if (!CanShoot)
-            return;
-        Shoot();
-    }
-    public void Shoot()
-    {
-        Vector2 dir = movement.Facing;
-        Vector2 playerPos = movement.Rb.position;
-        Vector2 spawnPos = playerPos + dir * spawnOffset;
+        void Start()
+        {
+            InputManager.Instance.OnShootKeyPressed += Shoot;
+        }
 
-        GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-        FrogProjectile FrogScript = projectile.GetComponent<FrogProjectile>();
-        FrogScript.Launch(dir, projectileSpeed);
+        void OnDestroy()
+        {
+            if (InputManager.Instance == null) return;
+            InputManager.Instance.OnShootKeyPressed -= Shoot;
+        }
 
+        public void UnlockFrogStaff()
+        {
+            if (_canShoot) return;
+
+            _canShoot = true;
+        }
+
+        void Shoot()
+        {
+            if (!_canShoot)
+                return;
+
+            Vector2 direction = _playerMovement.Facing;
+            Vector2 playerPosition = _playerMovement.Rb.position;
+            Vector2 spawnPosition = playerPosition + direction * SpawnOffset;
+
+            FrogProjectile projectile = Instantiate(_projectilePrefab, spawnPosition, Quaternion.identity);
+            projectile.Launch(direction, _projectileSpeed);
+        }
     }
 }

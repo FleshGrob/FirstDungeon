@@ -1,30 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
-public class MirrorSwitch : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-    [SerializeField] Mirror mirror;
-    bool playerInRange;
-
-
-    void OnTriggerEnter2D(Collider2D other)
+    public class MirrorSwitch : MonoBehaviour
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            playerInRange = true;
-    }
+        [SerializeField] Mirror _mirror;
+        bool _isPlayerInRange;
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
-            playerInRange = false;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(GameKeys.Action) && playerInRange == true)
+        void Start()
         {
-            mirror.transform.Rotate(0, 0, 45);
+            InputManager.Instance.OnActionKeyPressed += Rotate;
+        }
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.GetComponent<PlayerMovement>() != null)
+                _isPlayerInRange = true;
+        }
+
+        void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.GetComponent<PlayerMovement>() != null)
+                _isPlayerInRange = false;
+        }
+        
+        void OnDestroy()
+        {
+            if (InputManager.Instance != null) 
+                InputManager.Instance.OnActionKeyPressed -= Rotate;
+        }
+
+        void Rotate()
+        {
+            if (_isPlayerInRange)
+                _mirror.transform.Rotate(0, 0, 45);
         }
     }
 }

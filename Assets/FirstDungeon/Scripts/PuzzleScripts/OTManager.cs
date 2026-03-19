@@ -1,43 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.ObjectsScripts;
 using UnityEngine;
 
-public class OTManager : MonoBehaviour
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    [SerializeField] OrderTarget[] order;
-    [SerializeField] GameObject chestPrefab;
-    [SerializeField] Transform chestSpawnPos;
-
-    int currentIndex = 0;
-    bool solved;
-
-
-    public void OnTargetHit(OrderTarget t)
+    public class OTManager : MonoBehaviour
     {
-        if (solved == true)
-            return;
-        if (t == order[currentIndex])
-        {
-            t.SetCorrect();
-            currentIndex += 1;
-        }
-        else
-        {
-            ResetAll();
-            currentIndex = 0;
-        }
-        if (currentIndex >= order.Length)
-        {
-            solved = true;
-            Instantiate(chestPrefab, chestSpawnPos.position, Quaternion.identity);
-        }
+        [SerializeField] Color _activeColor;
+        [SerializeField] GameObject _chestPrefab;
+        [SerializeField] Transform _chestSpawnPos;
 
-    }
+        OrderTarget[] _orderTargets;
+        int _currentIndex;
+        
+        public Color ActiveColor  => _activeColor;
+        public bool IsSolved { get; private set; }
 
 
-    void ResetAll()
-    {
-        foreach (OrderTarget t in order)
-            t.SetIdle();
+        void Awake()
+        {
+            _orderTargets =  GetComponentsInChildren<OrderTarget>();
+        }
+
+        public void OnTargetHit(OrderTarget t)
+        {
+            if (IsSolved)
+                return;
+            if (t == _orderTargets[_currentIndex])
+            {
+                t.SetActive();
+                _currentIndex += 1;
+            }
+            else
+            {
+                ResetAll();
+                _currentIndex = 0;
+            }
+            if (_currentIndex >= _orderTargets.Length)
+                Solve();
+
+        }
+        
+        void ResetAll()
+        {
+            foreach (OrderTarget t in _orderTargets)
+                t.SetIdle();
+        }
+
+        void Solve()
+        {
+            IsSolved = true;
+            Instantiate(_chestPrefab, _chestSpawnPos.position, Quaternion.identity);
+        }
     }
 }

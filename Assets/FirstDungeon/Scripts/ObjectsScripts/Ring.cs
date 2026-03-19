@@ -1,58 +1,62 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PuzzleScripts;
 using UnityEngine;
 
-public class Ring : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-    [SerializeField] RingManager manager;
-    [SerializeField] Color hitColor;
-
-    public bool Activated = false;
-    FrogProjectile frog;
-    int frogID;
-    public SpriteRenderer sr;
-    public Color originalColor;
-
-
-    private void Awake()
+    public class Ring : MonoBehaviour
     {
-        sr = GetComponent<SpriteRenderer>();
-        originalColor = sr.color;
-    }
+        RingManager _manager;
+        SpriteRenderer _sr;
+        Color _originalColor;
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        frog = collision.GetComponent<FrogProjectile>();
-        if (frog != null)
+        
+        public bool IsActivated { get; private set; }
+
+
+        void Awake()
         {
-            frogID = frog.GetInstanceID();
-            Hit();
+            _sr = GetComponent<SpriteRenderer>();
+            _manager = GetComponentInParent<RingManager>();
+            _originalColor = _sr.color;
+        }
+
+        void OnTriggerEnter2D(Collider2D collision)
+        {
+            FrogProjectile frogProjectile = collision.GetComponent<FrogProjectile>();
+            if (frogProjectile != null)
+            {
+                int frogID = frogProjectile.GetInstanceID();
+                Hit(frogProjectile, frogID);
+            }
+        }
+
+        void Hit(FrogProjectile incomingFrog, int incomingID)
+        {
+            if (_manager.IsSolved)
+                return;
+            if (_manager.RightID == 0)
+            {
+                _manager.GetFrog(incomingID, incomingFrog);
+                IsActivated = true;
+                _sr.color = _manager.ActiveColor;
+            }
+            else if (incomingID == _manager.RightID)
+            {
+                IsActivated = true;
+                _sr.color = _manager.ActiveColor;
+                _manager.CheckHit();
+            }
+            else
+            {
+                _manager.Restart();
+            }
+        }
+
+        public void Cancel()
+        {
+            _sr.color = _originalColor;
+            IsActivated = false;
         }
     }
-
-    public void Hit()
-    {
-        if (manager == null)
-            return;
-        if (manager.Solved == true)
-            return;
-        if (manager.rightID == 0)
-        {
-            manager.GetFrog(frogID, frog);
-            Activated = true;
-            sr.color = hitColor;
-        }
-        else if (frogID == manager.rightID)
-        {
-            Activated = true;
-            sr.color = hitColor;
-            manager.CheckHit();
-        }
-        else
-        {
-            manager.Reset();
-        }
-
-    }
-
 }

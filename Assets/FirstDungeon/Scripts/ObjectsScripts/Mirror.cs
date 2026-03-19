@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
-public class Mirror : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-
-    private void OnTriggerEnter2D (Collider2D other)
+    public class Mirror : MonoBehaviour
     {
-        FrogProjectile fp = other.gameObject.GetComponent<FrogProjectile>();
-        if (fp != null)
+        void OnTriggerEnter2D(Collider2D other)
         {
-            Vector2 normal = transform.right;
-            Vector2 dir = fp.Rb.velocity.normalized;
-            Vector2 newDir = Vector2.Reflect(dir, normal);
+            FrogProjectile frogProjectile = other.GetComponent<FrogProjectile>();
+            if (frogProjectile != null)
+            {
+                Vector2 normal = transform.right;
+                Vector2 dir = frogProjectile.Rb.velocity.normalized;
+                Vector2 newDir = Vector2.Reflect(dir, normal);
 
-            fp.Reflection(newDir);
+                frogProjectile.Reflect(newDir);
+            }
         }
-
     }
 }

@@ -1,4 +1,7 @@
-public interface IDamageable 
+namespace FirstDungeon.Scripts.OtherScripts
 {
-    void TakeDamage(float damage);
+    public interface IDamageable 
+    {
+        void TakeDamage(int damage);
+    }
 }

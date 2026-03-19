@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public static class GameKeys
+namespace FirstDungeon.Scripts.OtherScripts
 {
-    public static KeyCode Action = KeyCode.I;
-    public static KeyCode Shoot = KeyCode.J;
+    public static class GameKeys
+    {
+        public const KeyCode Action = KeyCode.I;
+        public const KeyCode Shoot = KeyCode.J;
+    }
 }

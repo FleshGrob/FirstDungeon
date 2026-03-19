@@ -1,32 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.ObjectsScripts;
 using UnityEngine;
 
-public class TTManager : MonoBehaviour
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    [SerializeField] TimerTarget[] targets;
-    [SerializeField] GameObject chestPrefab;
-    [SerializeField] Transform chestSpawnPos;
-    [SerializeField] float fullTimer = 1.5f;
-    public float FullTimer => fullTimer;
-
-    bool solved;
-    public bool Solved => solved;
-
-
-    public void OnTargetHit()
+    public class TTManager : MonoBehaviour
     {
-        if (solved == true)
-            return;
+        [SerializeField] float _fullTimer;
+        [SerializeField] Color _activeColor;
+        [SerializeField] GameObject _chestPrefab;
+        [SerializeField] Transform _chestSpawnPos;
+        
+        TimerTarget[] _targets;
 
-        foreach (TimerTarget t in targets)
+        public Color ActiveColor => _activeColor;
+        public float FullTimer => _fullTimer; 
+        public bool IsSolved { get; private set; }
+        
+
+        void Awake()
         {
-            if (t.IsActivated == false) return;
+            _targets = GetComponentsInChildren<TimerTarget>();
         }
 
-        solved = true;
+        public void OnTargetHit()
+        {
+            if (IsSolved)
+                return;
 
-        if (solved == true)
-            Instantiate(chestPrefab, chestSpawnPos.position, Quaternion.identity);
+            foreach (TimerTarget t in _targets)
+            {
+                if (!t.IsActivated) return;
+            }
+            
+            Solve();
+        }
+        
+        void Solve()
+        {
+            IsSolved = true;
+            Instantiate(_chestPrefab, _chestSpawnPos.position, Quaternion.identity);
+        }
     }
 }

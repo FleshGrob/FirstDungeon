@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
-public class DarkFlame : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-
-    void OnTriggerEnter2D(Collider2D other)
+    public class DarkFlame : MonoBehaviour
     {
-        FrogProjectile frog = other.GetComponent<FrogProjectile>();
-        SpriteRenderer frogsr = other.GetComponent<SpriteRenderer>();
-        if (frog == null) return;
-        frog.Dark = true;
-        frogsr.color = frog.DarkColor;
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            FrogProjectile frogProjectile = other.GetComponent<FrogProjectile>();
+            if (frogProjectile == null) return;
+            frogProjectile.TurnDark();
+        }
     }
 }

@@ -1,52 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using FirstDungeon.Scripts.ObjectsScripts;
+using UnityEngine;
 
-public class FrogProjectile : MonoBehaviour
+namespace FirstDungeon.Scripts.OtherScripts
 {
-    public Color DarkColor;   
-    public Rigidbody2D Rb => rb;
-    public bool Dark = false;
-
-    float speed;
-    float lifeTime = 8f;
-    Rigidbody2D rb;
-    bool death = false;
-    public event Action<bool> OnDeath;
-
-
-    void Awake()
+    public class FrogProjectile : MonoBehaviour
     {
-        rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, lifeTime);
-    }
+        [SerializeField] Color _darkColor;   
+        
+        SpriteRenderer _sr;
+        float _speed;
+        
+        public Rigidbody2D Rb { get; private set; }
+        public bool IsDark { get; private set; }
+        
+        public event Action OnDisposed;
 
-    public void Launch(Vector2 dir, float speed)
-    {
-        if (dir == Vector2.zero)
-            return;
-        dir = dir.normalized;
-        this.speed = speed;
-        rb.velocity = dir * speed;
-    }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Dark") == true) return;
-        if (other.GetComponent<Mirror>() != null) return;
-        if (other.GetComponent<Ring>() != null) return;
-        death = true;
-        Destroy(gameObject);  
-    }
+        void Awake()
+        {
+            Rb = GetComponent<Rigidbody2D>();
+            _sr = GetComponent<SpriteRenderer>();
+        }
+        
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.GetComponent<DarkFlame>() != null) return;
+            if (other.GetComponent<Mirror>() != null) return;
+            if (other.GetComponent<Ring>() != null) return;
+            Destroy(gameObject);  
+        }
+        
+        void OnDestroy()
+        {
+            OnDisposed?.Invoke();
+        }
 
-    public void Reflection (Vector2 newDir)
-    {
-        rb.velocity = newDir * speed;
-    }
+        public void Launch(Vector2 direction, float speed)
+        {
+            _speed = speed;
+            Rb.velocity = direction * speed;
+        }
 
-    void OnDestroy()
-    {
-        OnDeath?.Invoke(death);
+        public void Reflect(Vector2 newDirection)
+        {
+            Rb.velocity = newDirection * _speed;
+        }
+
+        public void TurnDark()
+        {
+            _sr.color = _darkColor;
+            IsDark = true;
+        }
     }
 }

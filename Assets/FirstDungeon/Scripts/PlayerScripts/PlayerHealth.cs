@@ -1,31 +1,34 @@
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour, IDamageable
+namespace FirstDungeon.Scripts.PlayerScripts
 {
-    float health = 5;
-    float maxHealth = 5;
+    public class PlayerHealth : MonoBehaviour, IDamageable
+    {
+        int _health = 5;
+        int _maxHealth = 5;
     
 
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        if (health <= 0)
-            PlayerState.Instance.Death();
-        Debug.Log(health);
-    }
+        public void TakeDamage(int damage)
+        {
+            _health -= damage;
+            if (_health <= 0)
+                PlayerState.Instance.Die();
+            Debug.Log(_health);
+        }
 
-    public void Heal(float hp)
-    {
-        if (health == maxHealth)
-            return;
-        health += hp;
-        if (health > maxHealth)
-            health = maxHealth;
-    }
+        public void Heal(int hp)
+        {
+            if (_health == _maxHealth)
+                return;
+            _health += hp;
+            if (_health > _maxHealth)
+                _health = _maxHealth;
+        }
 
-    public void UpgradeHealth(float hpUpgrade)
-    {
-        maxHealth += hpUpgrade;
+        public void UpgradeHealth(int hpUpgrade)
+        {
+            _maxHealth += hpUpgrade;
+        }
     }
-
 }

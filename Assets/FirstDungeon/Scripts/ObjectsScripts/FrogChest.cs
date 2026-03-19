@@ -1,40 +1,43 @@
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
-public class FrogChest : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-    bool isOpened = false;
-    bool playerInRange = false;
-    PlayerShooter shooter;
-
-    void Update()
+    public class FrogChest : MonoBehaviour
     {
-        if (playerInRange && !isOpened && Input.GetKeyDown(GameKeys.Action))
-            Open();
-    }
+        bool _isOpen;
+        PlayerShooter _playerShooter;
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        shooter = other.GetComponent<PlayerShooter>();
-        if (shooter == null) return;
+        void Start()
+        {
+            InputManager.Instance.OnActionKeyPressed += Open;
+        }
 
-        playerInRange = true;
-    }
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (_playerShooter != null)
+                return;
+            _playerShooter = other.GetComponent<PlayerShooter>();
+        }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.GetComponent<PlayerShooter>() == null) return;
+        void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.GetComponent<PlayerShooter>() == null) return;
 
-        playerInRange = false;
-        shooter = null;
-    }
+            _playerShooter = null;
+        }
 
-    void Open()
-    {
-        if (shooter == null) return;
+        void Open()
+        {
+            if (_isOpen) return;
+            if (_playerShooter == null) return;
 
-        isOpened = true;
-        shooter.UnlockFrogStaff();
+            _isOpen = true;
+            _playerShooter.UnlockFrogStaff();
 
-        Destroy(gameObject);
+            InputManager.Instance.OnActionKeyPressed -= Open;
+            Destroy(gameObject);
+        }
     }
 }

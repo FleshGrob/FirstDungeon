@@ -1,38 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.ObjectsScripts;
 using UnityEngine;
 
-public class CTManager : MonoBehaviour
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    [SerializeField] Color[] cycleColors;
-    [SerializeField] ColorTarget[] targets;
-    [SerializeField] GameObject chestPrefab;
-    [SerializeField] Transform chestSpawnPos;
-
-    public Color[] CycleColors => cycleColors;
-    public int GreenIndex;
-
-    bool solved;
-    public bool IsSolved => solved;
-
-
-    public void OnTargetHit()
+    public class CTManager : MonoBehaviour
     {
-        if (solved == true)
-            return;
-        if (AllGreen(targets) == true)
-            solved = true;
-        if (solved == true)
-            Instantiate(chestPrefab, chestSpawnPos.position, Quaternion.identity);
-    }
+        [SerializeField] Color[] _cycleColors;
+        [SerializeField] GameObject _chestPrefab;
+        [SerializeField] Transform _chestSpawnPos;
+        [SerializeField] int _rightColorIndex;
+        
+        ColorTarget[] _targets;
+        
+        public bool IsSolved { get; private set; }
+        public int RightColorIndex =>_rightColorIndex; 
+        public Color[] CycleColors => _cycleColors; 
 
-    bool AllGreen(ColorTarget[] targets)
-    {
-        foreach (ColorTarget t in targets)
+        void Awake()
         {
-            if (t.IsGreen == false)
-                return false;
+            _targets = GetComponentsInChildren<ColorTarget>();
         }
-        return true;
+
+        public void OnTargetHit()
+        {
+            if (IsSolved)
+                return;
+            if (AllRightColor(_targets))
+                Solve();
+        }
+
+        bool AllRightColor(ColorTarget[] targets)
+        {
+            foreach (ColorTarget t in targets)
+            {
+                if (!t.IsRightColor)
+                    return false;
+            }
+            return true;
+        }
+
+        void Solve()
+        {
+            IsSolved = true;
+            Instantiate(_chestPrefab, _chestSpawnPos.position, Quaternion.identity);
+        }
     }
 }

@@ -1,33 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PuzzleScripts;
 using UnityEngine;
 
-public class ChaosTarget : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
-    [SerializeField] ChTManager manager;
-    [SerializeField] Color activeColor;
-    SpriteRenderer sr;
+    public class ChaosTarget : MonoBehaviour
+    {
+        ChTManager _manager;
+        SpriteRenderer _spriteRenderer;
 
-    bool activated = false;
-    public bool Activated => activated;
+        public bool IsActivated { get; private set; }
     
     
-    private void Awake()
-    {
-        sr = GetComponent<SpriteRenderer>();
-    }
+        void Awake()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _manager = GetComponentInParent<ChTManager>();
+        }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        FrogProjectile frog = other.GetComponent<FrogProjectile>();
-        if (frog != null && frog.Dark == true)
-            Hit();
-    }
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            FrogProjectile frog = other.GetComponent<FrogProjectile>();
+            if (frog != null && frog.IsDark)
+                Hit();
+        }
 
-    void Hit()
-    {
-        activated = true;
-        sr.color = activeColor;
-        manager.OnTargetHit();
+        void Hit()
+        {
+            IsActivated = true;
+            _spriteRenderer.color = _manager.ActiveColor;
+            _manager.OnTargetHit();
+        }
     }
 }

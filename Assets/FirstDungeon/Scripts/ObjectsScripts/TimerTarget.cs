@@ -1,54 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PuzzleScripts;
 using UnityEngine;
 
-public class TimerTarget : MonoBehaviour
+namespace FirstDungeon.Scripts.ObjectsScripts
 {
+    public class TimerTarget : MonoBehaviour
+    { 
+        TTManager _manager;
+        Color _idleColor;
+        SpriteRenderer _sr;
 
-    [SerializeField] TTManager manager;
-    [SerializeField] Color hitColor;
-    Color originalColor;
-    
-    bool activated;
-    public bool IsActivated => activated;
-    float timer;
+        float _timer;
+        
+        public bool IsActivated { get; private set; }
+        
+        
+        void Awake()
+        {
+            _sr = GetComponent<SpriteRenderer>();
+            _manager = GetComponentInParent<TTManager>();
+            _idleColor = _sr.color;
+        }
 
-    SpriteRenderer sr;
-    FrogProjectile frog;
-    
+        void Update()
+        {
+            if (_manager.IsSolved) return;
 
+            if (_timer > 0f) _timer -= Time.deltaTime;
+            else IsActivated = false;
 
-    void Start()
-    {
-        sr = GetComponent<SpriteRenderer>();
-        originalColor = sr.color;
-    }
+            if (!IsActivated) _sr.color = _idleColor;
+        }
+        
+        void OnTriggerEnter2D(Collider2D collision)
+        {
+            FrogProjectile frogProjectile = collision.GetComponent<FrogProjectile>();
+            if (frogProjectile != null)
+                Hit();
+        }
 
-    void Update()
-    {
-        if (manager.Solved == true) return;
+        void Hit()
+        {
+            if (IsActivated)
+                return;
+            IsActivated = true;
+            _sr.color = _manager.ActiveColor;
+            _timer = _manager.FullTimer;
 
-        if (timer > 0f) timer -= Time.deltaTime;
-        else activated = false;
-
-        if (activated == false) sr.color = originalColor;
-    }
-
-    public void Hit()
-    {
-        if (activated == true)
-            return;
-        activated = true;
-        sr.color = hitColor;
-        timer = manager.FullTimer;
-
-        manager.OnTargetHit();
-    }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        frog = collision.GetComponent<FrogProjectile>();
-        if (frog != null)
-            Hit();
+            _manager.OnTargetHit();
+        }
     }
 }

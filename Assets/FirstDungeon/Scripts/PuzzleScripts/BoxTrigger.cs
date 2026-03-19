@@ -1,25 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.ObjectsScripts;
 using UnityEngine;
 
-public class BoxTrigger : MonoBehaviour
-
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    [SerializeField] DoorController door;
-
-    void OnTriggerEnter2D(Collider2D other)
+    public class BoxTrigger : MonoBehaviour
     {
-        if (other.CompareTag("Box"))
+        [SerializeField] DoorController _door;
+
+        void OnTriggerEnter2D(Collider2D other)
         {
-            door.OpenDoor();
+            if (other.GetComponent<PushableBox>() == null) return;
+            
+            _door.OpenDoor();
         }
-    }
 
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Box"))
+        void OnTriggerExit2D(Collider2D other)
         {
-            door.CloseDoor();
+            if (other.GetComponent<PushableBox>() == null) return;
+            
+            _door.CloseDoor();
         }
     }
 }

@@ -1,29 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
+using FirstDungeon.Scripts.ObjectsScripts;
 using UnityEngine;
 
-public class ChTManager : MonoBehaviour
+namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    [SerializeField] ChaosTarget[] targets;
-    [SerializeField] GameObject chestPrefab;
-    [SerializeField] Transform chestSpawnPos;
-
-    bool solved;
-    public bool Solved => solved;
-
-
-    public void OnTargetHit()
+    public class ChTManager : MonoBehaviour
     {
-        if (solved == true)
-            return;
+        [SerializeField] GameObject _chestPrefab;
+        [SerializeField] Transform _chestSpawnPos;
+        [SerializeField] Color _activeColor;
+        
+        ChaosTarget[] _targets;
 
-        foreach (ChaosTarget t in targets)
+        public bool IsSolved { get; private set; }
+        public Color ActiveColor => _activeColor; 
+
+
+        void Awake()
         {
-            if (t.Activated == false) return;
+            _targets = GetComponentsInChildren<ChaosTarget>();
         }
 
-        solved = true;
-        if (solved == true)
-            Instantiate(chestPrefab, chestSpawnPos.position, Quaternion.identity);
+        public void OnTargetHit()
+        {
+            if (IsSolved)
+                return;
+            
+            foreach (ChaosTarget t in _targets)
+            {
+                if (!t.IsActivated) return;
+            }
+
+            Solve();
+        }
+
+        void Solve()
+        {
+            IsSolved = true; 
+            Instantiate(_chestPrefab, _chestSpawnPos.position, Quaternion.identity);
+        }
     }
 }

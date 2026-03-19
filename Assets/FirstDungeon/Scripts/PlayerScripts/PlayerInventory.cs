@@ -1,34 +1,34 @@
 using System;
 using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour
+namespace FirstDungeon.Scripts.PlayerScripts
 {
-    public int keys = 0;
-    public event Action<int> OnKeysChanged;
-
-    void NotifyKeysChanged()
+    public class PlayerInventory : MonoBehaviour
     {
-        OnKeysChanged?.Invoke(keys);
-    }
+        int _keys;
+        
+        public event Action<int> OnKeysChanged;
 
-    public bool HasKey()
-    {
-        return keys > 0;
-    }
+        
+        void NotifyKeysChanged()
+        {
+            OnKeysChanged?.Invoke(_keys);
+        }
 
-    public void AddKey()
-    {
-        keys++;
-        NotifyKeysChanged();
-    }
+        public void AddKey()
+        {
+            _keys++;
+            NotifyKeysChanged();
+        }
 
-    public bool UseKey()
-    {
-        if (keys <= 0)
-            return false;
+        public bool UseKey()
+        {
+            if (_keys <= 0)
+                return false;
 
-        keys--;
-        NotifyKeysChanged();
-        return true;
+            _keys--;
+            NotifyKeysChanged();
+            return true;
+        }
     }
 }
