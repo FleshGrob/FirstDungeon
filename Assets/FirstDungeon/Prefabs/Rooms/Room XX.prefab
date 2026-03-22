@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 1985623790535487904}
   - component: {fileID: 3491141132678354326}
   - component: {fileID: 3066022757894690656}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Bog
   m_TagString: Untagged
   m_Icon: {fileID: 0}

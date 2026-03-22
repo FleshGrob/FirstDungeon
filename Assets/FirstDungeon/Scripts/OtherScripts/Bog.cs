@@ -41,7 +41,6 @@ namespace FirstDungeon.Scripts.OtherScripts
             if (!_bogCol.OverlapPoint(playerPos)) return;
             if (!PlayerState.Instance.InBog) return;
             if (PlayerState.Instance.IsStunned) return;
-            if (_damageable == null) return;
             
             _damageable.TakeDamage(_damage);
             _playerMovement.Drown(_drownTime);
