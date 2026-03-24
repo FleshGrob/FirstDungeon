@@ -8,8 +8,9 @@ namespace FirstDungeon.Scripts.PlayerScripts
     {
         [SerializeField] float _speed;
         
+        public MovingPlatform Platform { get; set; }  
+        
         Vector2 _movementInput;
-        MovingPlatform Platform;   
         
         public Vector2 MovementInputRaw => _movementInput;
         public Vector2 Facing { get; private set; } = Vector2.down;
@@ -20,18 +21,6 @@ namespace FirstDungeon.Scripts.PlayerScripts
         void Awake()
         {
             Rb = GetComponent<Rigidbody2D>();
-        }
-        
-        void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.GetComponent<MovingPlatform>() != null) 
-                Platform = other.GetComponent<MovingPlatform>();
-        }
-
-        void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.GetComponent<MovingPlatform>() != null)
-                Platform = null;
         }
 
         void Update()
@@ -58,7 +47,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
             Vector2 playerVelocity = _speed * _movementInput.normalized;
             
-            if (Platform == null || !PlayerState.Instance.IsOnPlatform)
+            if (Platform == null)
                 Rb.velocity = playerVelocity;
             else Rb.velocity = playerVelocity + Platform.PlatformShift / Time.fixedDeltaTime;
         }

@@ -56,11 +56,11 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
             if (!_col.OverlapPoint(playerPos))
             {
-                PlayerState.Instance.SetOnPlatform(false);
+                _playerMovement.Platform = null;
                 return;
             }
 
-            PlayerState.Instance.SetOnPlatform(true);
+            _playerMovement.Platform = this;
         }
 
         void OnTriggerExit2D(Collider2D other)
