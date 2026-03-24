@@ -39,7 +39,7 @@ namespace FirstDungeon.Scripts.OtherScripts
             Vector2 playerPos = _playerMovement.Rb.position;
             
             if (!_bogCol.OverlapPoint(playerPos)) return;
-            if (!PlayerState.Instance.InBog) return;
+            if (!PlayerState.Instance.IsInBog) return;
             if (PlayerState.Instance.IsStunned) return;
             
             _damageable.TakeDamage(_damage);

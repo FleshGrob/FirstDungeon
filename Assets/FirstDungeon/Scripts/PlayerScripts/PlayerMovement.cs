@@ -1,4 +1,5 @@
 using System.Collections;
+using FirstDungeon.Scripts.ObjectsScripts;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.PlayerScripts
@@ -8,6 +9,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         [SerializeField] float _speed;
         
         Vector2 _movementInput;
+        MovingPlatform Platform;   
         
         public Vector2 MovementInputRaw => _movementInput;
         public Vector2 Facing { get; private set; } = Vector2.down;
@@ -18,6 +20,18 @@ namespace FirstDungeon.Scripts.PlayerScripts
         void Awake()
         {
             Rb = GetComponent<Rigidbody2D>();
+        }
+        
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.GetComponent<MovingPlatform>() != null) 
+                Platform = other.GetComponent<MovingPlatform>();
+        }
+
+        void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.GetComponent<MovingPlatform>() != null)
+                Platform = null;
         }
 
         void Update()
@@ -31,7 +45,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             if (ax > ay) Facing = _movementInput.x > 0 ? Vector2.right : Vector2.left;
             else if (ay > ax) Facing = _movementInput.y > 0 ? Vector2.up : Vector2.down;
 
-            if (!PlayerState.Instance.InBog) SafePosition = Rb.position;
+            if (!PlayerState.Instance.IsInBog) SafePosition = Rb.position;
         }
 
         void FixedUpdate()
@@ -42,7 +56,11 @@ namespace FirstDungeon.Scripts.PlayerScripts
                 return;
             }
 
-            Rb.velocity = _speed * _movementInput.normalized;
+            Vector2 playerVelocity = _speed * _movementInput.normalized;
+            
+            if (Platform == null || !PlayerState.Instance.IsOnPlatform)
+                Rb.velocity = playerVelocity;
+            else Rb.velocity = playerVelocity + Platform.PlatformShift / Time.fixedDeltaTime;
         }
 
         public void Drown(float drowningTime) => StartCoroutine(DrownRoutine(drowningTime));

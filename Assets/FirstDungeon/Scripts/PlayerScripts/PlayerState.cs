@@ -7,7 +7,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
     {
         public static PlayerState Instance { get; private set; }
         public bool IsStunned { get; private set; }
-        public bool InBog { get; private set; }
+        public bool IsInBog { get; private set; }
+        public bool IsOnPlatform { get; private set; }
         public bool IsAlive { get; private set; } = true;
 
         void Awake()
@@ -20,7 +21,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Instance = this;
         }
 
-        public void SetInBog(bool value) => InBog = value;
+        public void SetInBog(bool value) => IsInBog = value;
+        public void SetOnPlatform(bool value) => IsOnPlatform = value;
 
         public void Stun(float time) => StartCoroutine(StunRoutine(time));
 
