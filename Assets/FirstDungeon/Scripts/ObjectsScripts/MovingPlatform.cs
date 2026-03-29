@@ -14,7 +14,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         PlayerMovement _playerMovement;
         Vector2 _currentTarget;
         
-        public Vector2 PlatformShift { get;  private set; }
+        public Vector2 PlatformShift { get; private set; }
         
 
         void Awake()
@@ -44,8 +44,9 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.GetComponent<PlayerMovement>() == null) return;
-            _playerMovement = other.GetComponent<PlayerMovement>();
+            PlayerMovement playerMovement =  other.GetComponent<PlayerMovement>();
+            if (playerMovement == null) return;
+            _playerMovement = playerMovement;
         }
 
         void OnTriggerStay2D(Collider2D other)
@@ -54,18 +55,29 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
             Vector2 playerPos = other.bounds.center;
 
-            if (!_col.OverlapPoint(playerPos))
+            if (!_col.OverlapPoint(playerPos) && _playerMovement.Platform == this)
             {
                 _playerMovement.Platform = null;
+                PlayerState.Instance.CantSink(false);
                 return;
             }
-
+            
+            if (!_col.OverlapPoint(playerPos)) return;
+            
             _playerMovement.Platform = this;
+            PlayerState.Instance.CantSink(true);
         }
 
         void OnTriggerExit2D(Collider2D other)
         {
-            if (_playerMovement != other.GetComponent<PlayerMovement>()) return;
+            if (_playerMovement == null) return;
+            if (_playerMovement.gameObject != other.gameObject) return;
+            if (_playerMovement.Platform == this)
+            {
+                _playerMovement.Platform = null; 
+                PlayerState.Instance.CantSink(false);
+            } 
+            
             _playerMovement = null;
         }
     }

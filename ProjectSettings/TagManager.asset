@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Box
+  - PlayerSafeZone
   layers:
   - Default
   - TransparentFX
@@ -15,13 +16,13 @@ TagManager:
   - Enemy
   - PlayerProjectile
   - EnemyProjectile
-  - Interactable
+  - Fence
   - Pushable
   - Solid
   - Trigger
   - Bog
   - Room
-  - 
+  - Platforms
   - 
   - 
   - 
@@ -53,6 +54,9 @@ TagManager:
     locked: 0
   - name: Objects
     uniqueID: 2739678975
+    locked: 0
+  - name: Objects2
+    uniqueID: 470222697
     locked: 0
   - name: Characters
     uniqueID: 1150972455

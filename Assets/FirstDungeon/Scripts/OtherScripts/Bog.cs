@@ -11,13 +11,11 @@ namespace FirstDungeon.Scripts.OtherScripts
         
         readonly int _damage = 1;
         readonly float _drownTime = 1;
-        float _stunTime;
         
         
         void Awake()
         {
             _bogCol = GetComponent<Collider2D>();
-            _stunTime = _drownTime;
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -26,30 +24,29 @@ namespace FirstDungeon.Scripts.OtherScripts
             
             _playerMovement = other.GetComponent<PlayerMovement>();
             _damageable = other.GetComponent<IDamageable>();
-            
-            if (_playerMovement == null) return;
-            
-            PlayerState.Instance.SetInBog(true);
         }
 
         void OnTriggerStay2D(Collider2D other)
         {
             if (_playerMovement == null) return;
+            PlayerState.Instance.SetInBog(true);
             
-            Vector2 playerPos = _playerMovement.Rb.position;
+            if (PlayerState.Instance.IsUnsinkable) return;
+            
+            Vector2 playerPos = other.bounds.center;
             
             if (!_bogCol.OverlapPoint(playerPos)) return;
-            if (!PlayerState.Instance.IsInBog) return;
             if (PlayerState.Instance.IsStunned) return;
             
             _damageable.TakeDamage(_damage);
             _playerMovement.Drown(_drownTime);
-            PlayerState.Instance.Stun(_stunTime);
+            PlayerState.Instance.Stun(_drownTime);
         }
 
         void OnTriggerExit2D(Collider2D other)
         {
-            if (other.GetComponent<PlayerMovement>() == null) return;
+            if (_playerMovement == null) return;
+            if (_playerMovement.gameObject != other.gameObject) return;
             
             PlayerState.Instance.SetInBog(false);
             _playerMovement = null;

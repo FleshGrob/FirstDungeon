@@ -1,5 +1,6 @@
 using Cinemachine;
 using FirstDungeon.Scripts.PlayerScripts;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.OtherScripts
@@ -41,6 +42,7 @@ namespace FirstDungeon.Scripts.OtherScripts
         {
             if (_player == null) return;
             if (other.gameObject != _player.gameObject) return;
+            if (_col.OverlapPoint(_player.transform.position)) return;
 
             _confiner.m_BoundingShape2D = null;
         }

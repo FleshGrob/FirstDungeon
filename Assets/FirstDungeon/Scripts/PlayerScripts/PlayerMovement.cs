@@ -7,8 +7,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] float _speed;
-        
-        public MovingPlatform Platform { get; set; }  
+
+        public MovingPlatform Platform; 
         
         Vector2 _movementInput;
         
@@ -34,7 +34,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             if (ax > ay) Facing = _movementInput.x > 0 ? Vector2.right : Vector2.left;
             else if (ay > ax) Facing = _movementInput.y > 0 ? Vector2.up : Vector2.down;
 
-            if (!PlayerState.Instance.IsInBog) SafePosition = Rb.position;
+            if (!PlayerState.Instance.IsInBog && PlayerState.Instance.IsSafe) SafePosition = Rb.position;
         }
 
         void FixedUpdate()
@@ -62,8 +62,10 @@ namespace FirstDungeon.Scripts.PlayerScripts
                 t += Time.deltaTime;
                 yield return null;
             }
-            Rb.position = SafePosition;
+            BackToSafe();
             PlayerState.Instance.SetInBog(false);
         }
+
+        public void BackToSafe() => Rb.position = SafePosition;
     }
 }

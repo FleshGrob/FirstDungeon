@@ -5,10 +5,15 @@ namespace FirstDungeon.Scripts.PlayerScripts
 {
     public class PlayerState : MonoBehaviour
     {
+        [SerializeField] float _invulnerableTime = 1f;
+        
         public static PlayerState Instance { get; private set; }
         public bool IsStunned { get; private set; }
         public bool IsInBog { get; private set; }
         public bool IsAlive { get; private set; } = true;
+        public bool IsUnsinkable { get; private set; }
+        public bool IsSafe { get; private set; } = true;
+        public bool IsInvulnerable  { get; private set; }
 
         void Awake()
         {
@@ -21,6 +26,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
         }
 
         public void SetInBog(bool value) => IsInBog = value;
+        public void CantSink(bool value) => IsUnsinkable = value;
+        public void SetSafe(bool value) => IsSafe = value;
 
         public void Stun(float time) => StartCoroutine(StunRoutine(time));
 
@@ -36,6 +43,21 @@ namespace FirstDungeon.Scripts.PlayerScripts
             }
 
             IsStunned = false;
+        }
+        
+        public void SetInvulnerable() => StartCoroutine(InvulnerableRoutine(_invulnerableTime));
+        IEnumerator InvulnerableRoutine(float time)
+        {
+            IsInvulnerable = true;
+
+            float t = 0f;
+            while (t < time)
+            {
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            IsInvulnerable = false;
         }
 
         public void Die() => IsAlive = false;

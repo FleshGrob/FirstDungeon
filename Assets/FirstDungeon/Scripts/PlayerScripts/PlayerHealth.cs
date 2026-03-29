@@ -11,11 +11,19 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         public void TakeDamage(int damage)
         {
+            if (PlayerState.Instance.IsInvulnerable) return;
+            
             _health -= damage;
+            
             if (_health <= 0)
                 PlayerState.Instance.Die();
+
+            PlayerState.Instance.SetInvulnerable();
+            
             Debug.Log(_health);
         }
+
+        
 
         public void Heal(int hp)
         {
