@@ -58,14 +58,14 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             if (!_col.OverlapPoint(playerPos) && _playerMovement.Platform == this)
             {
                 _playerMovement.Platform = null;
-                PlayerState.Instance.CantSink(false);
+                PlayerState.Instance.GetInAir(false);
                 return;
             }
             
             if (!_col.OverlapPoint(playerPos)) return;
             
             _playerMovement.Platform = this;
-            PlayerState.Instance.CantSink(true);
+            PlayerState.Instance.GetInAir(true);
         }
 
         void OnTriggerExit2D(Collider2D other)
@@ -75,7 +75,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             if (_playerMovement.Platform == this)
             {
                 _playerMovement.Platform = null; 
-                PlayerState.Instance.CantSink(false);
+                PlayerState.Instance.GetInAir(false);
             } 
             
             _playerMovement = null;

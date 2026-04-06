@@ -11,7 +11,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public bool IsStunned { get; private set; }
         public bool IsInBog { get; private set; }
         public bool IsAlive { get; private set; } = true;
-        public bool IsUnsinkable { get; private set; }
+        public bool IsInAir { get; private set; }
         public bool IsSafe { get; private set; } = true;
         public bool IsInvulnerable  { get; private set; }
 
@@ -26,7 +26,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         }
 
         public void SetInBog(bool value) => IsInBog = value;
-        public void CantSink(bool value) => IsUnsinkable = value;
+        public void GetInAir(bool value) => IsInAir = value;
         public void SetSafe(bool value) => IsSafe = value;
 
         public void Stun(float time) => StartCoroutine(StunRoutine(time));

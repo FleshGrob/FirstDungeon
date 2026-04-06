@@ -16,6 +16,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         
             if (playerMovement == null) return;
             if (PlayerState.Instance.IsInvulnerable) return;
+            if (PlayerState.Instance.IsInAir) return;
         
             damageable.TakeDamage(1);
             playerMovement.BackToSafe();

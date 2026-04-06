@@ -31,7 +31,7 @@ namespace FirstDungeon.Scripts.OtherScripts
             if (_playerMovement == null) return;
             PlayerState.Instance.SetInBog(true);
             
-            if (PlayerState.Instance.IsUnsinkable) return;
+            if (PlayerState.Instance.IsInAir) return;
             
             Vector2 playerPos = other.bounds.center;
             
