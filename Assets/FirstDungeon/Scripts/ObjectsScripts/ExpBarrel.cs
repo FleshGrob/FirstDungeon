@@ -10,7 +10,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         
         void OnTriggerEnter2D(Collider2D other)
         {
-            FrogProjectile projectile = other.gameObject.GetComponent<FrogProjectile>();
+            FrogProjectile projectile = other.GetComponent<FrogProjectile>();
             if (projectile == null) return;
             
             Instantiate(_explosion, transform.position, transform.rotation);
