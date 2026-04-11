@@ -5,15 +5,15 @@ namespace FirstDungeon.Scripts.PlayerScripts
 {
     public class PlayerState : MonoBehaviour
     {
-        [SerializeField] float _invulnerableTime = 1f;
-        
+        [SerializeField] float _invulnerableTime = 0.5f;
+
         public static PlayerState Instance { get; private set; }
         public bool IsStunned { get; private set; }
         public bool IsInBog { get; private set; }
         public bool IsAlive { get; private set; } = true;
         public bool IsInAir { get; private set; }
         public bool IsSafe { get; private set; } = true;
-        public bool IsInvulnerable  { get; private set; }
+        public bool IsInvulnerable { get; private set; }
 
         void Awake()
         {
@@ -22,6 +22,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
                 Destroy(gameObject);
                 return;
             }
+
             Instance = this;
         }
 
@@ -29,8 +30,12 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public void GetInAir(bool value) => IsInAir = value;
         public void SetSafe(bool value) => IsSafe = value;
 
-        public void Stun(float time) => StartCoroutine(StunRoutine(time));
-
+        public void Stun(float time)
+        { 
+            if (IsInvulnerable) return;
+            StartCoroutine(StunRoutine(time)); 
+        }
+        
         IEnumerator StunRoutine(float time)
         {
             IsStunned = true;

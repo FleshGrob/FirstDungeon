@@ -6,10 +6,11 @@ namespace FirstDungeon.Scripts.OtherScripts
 {
     public class FrogProjectile : MonoBehaviour
     {
-        [SerializeField] Color _darkColor;   
+        [SerializeField] Color _darkColor;  
         
         SpriteRenderer _sr;
         float _speed;
+        int _damage;
         
         public Rigidbody2D Rb { get; private set; }
         public bool IsDark { get; private set; }
@@ -28,6 +29,10 @@ namespace FirstDungeon.Scripts.OtherScripts
             if (other.GetComponent<DarkFlame>() != null) return;
             if (other.GetComponent<Mirror>() != null) return;
             if (other.GetComponent<Ring>() != null) return;
+            
+            IDamageable damageable = other.GetComponent<IDamageable>();
+            if (damageable != null)
+                damageable.TakeDamage(_damage);
             Destroy(gameObject);  
         }
         
@@ -36,9 +41,10 @@ namespace FirstDungeon.Scripts.OtherScripts
             OnDisposed?.Invoke();
         }
 
-        public void Launch(Vector2 direction, float speed)
+        public void Launch(Vector2 direction, float speed, int damage)
         {
             _speed = speed;
+            _damage = damage;
             Rb.velocity = direction * speed;
         }
 

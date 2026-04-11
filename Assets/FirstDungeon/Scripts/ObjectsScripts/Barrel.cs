@@ -3,13 +3,10 @@ using UnityEngine;
 
 namespace FirstDungeon.Scripts.ObjectsScripts
 {
-    public class Barrel : MonoBehaviour
+    public class Barrel : MonoBehaviour, IDamageable
     {
-        void OnTriggerEnter2D(Collider2D other)
+        public void TakeDamage(int  damage, float stunTime)
         {
-            FrogProjectile projectile = other.gameObject.GetComponent<FrogProjectile>();
-            if (projectile == null) return;
-            
             Destroy(gameObject);
         }
     }

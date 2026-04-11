@@ -1,5 +1,3 @@
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.ObjectsScripts

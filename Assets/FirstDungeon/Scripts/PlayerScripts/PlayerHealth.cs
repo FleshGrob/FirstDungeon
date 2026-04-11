@@ -9,11 +9,13 @@ namespace FirstDungeon.Scripts.PlayerScripts
         int _maxHealth = 5;
     
 
-        public void TakeDamage(int damage)
+        public void TakeDamage(int damage, float stunDuration = 0)
         {
             if (PlayerState.Instance.IsInvulnerable) return;
             
             _health -= damage;
+            if (stunDuration > 0) 
+                PlayerState.Instance.Stun(stunDuration);
             
             if (_health <= 0)
                 PlayerState.Instance.Die();

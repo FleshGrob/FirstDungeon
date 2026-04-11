@@ -4,15 +4,13 @@ using UnityEngine;
 
 namespace FirstDungeon.Scripts.ObjectsScripts
 {
-    public class ExpBarrel : MonoBehaviour
+    public class ExpBarrel : MonoBehaviour, IDamageable
     {
         [SerializeField] Explosion _explosion;
         
-        void OnTriggerEnter2D(Collider2D other)
+        
+        public void TakeDamage(int  damage, float stunTime)
         {
-            FrogProjectile projectile = other.GetComponent<FrogProjectile>();
-            if (projectile == null) return;
-            
             Instantiate(_explosion, transform.position, transform.rotation);
             Destroy(gameObject);
         }

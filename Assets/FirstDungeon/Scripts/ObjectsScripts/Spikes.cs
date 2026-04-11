@@ -6,27 +6,21 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class Spikes : MonoBehaviour
     {
+        [SerializeField] float _stunTime;
+        
+        const int SpikesDamage = 1;
+        
+        
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("PlayerSafeZone"))
-                PlayerState.Instance.SetSafe(false);
-        
             PlayerMovement playerMovement = other.GetComponent<PlayerMovement>();
             IDamageable damageable = other.GetComponent<IDamageable>();
         
             if (playerMovement == null) return;
-            if (PlayerState.Instance.IsInvulnerable) return;
             if (PlayerState.Instance.IsInAir) return;
-        
-            damageable.TakeDamage(1);
+            
+            damageable.TakeDamage(SpikesDamage, _stunTime);
             playerMovement.BackToSafe();
-            PlayerState.Instance.Stun(0.4f);
-        }
-
-        void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("PlayerSafeZone"))
-                PlayerState.Instance.SetSafe(true);
         }
     }
 }
