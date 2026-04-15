@@ -1,6 +1,5 @@
 using Cinemachine;
 using FirstDungeon.Scripts.PlayerScripts;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.OtherScripts

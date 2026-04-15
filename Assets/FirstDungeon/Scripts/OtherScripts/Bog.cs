@@ -36,11 +36,9 @@ namespace FirstDungeon.Scripts.OtherScripts
             Vector2 playerPos = other.bounds.center;
             
             if (!_bogCol.OverlapPoint(playerPos)) return;
-            if (PlayerState.Instance.IsStunned) return;
             
-            _damageable.TakeDamage(_damage);
+            _damageable.TakeDamage(_damage, _drownTime);
             _playerMovement.Drown(_drownTime);
-            PlayerState.Instance.Stun(_drownTime);
         }
 
         void OnTriggerExit2D(Collider2D other)

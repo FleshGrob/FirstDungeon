@@ -27,6 +27,12 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             
             _playerInventory = null;
         }
+        
+        void OnDestroy()
+        {
+            if (InputManager.Instance == null) return;
+            InputManager.Instance.OnActionKeyPressed -= Open;
+        }
 
         void Open()
         {

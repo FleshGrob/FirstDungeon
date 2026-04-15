@@ -7,15 +7,15 @@ namespace FirstDungeon.Scripts.PlayerScripts
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] float _speed;
-
-        public MovingPlatform Platform; 
         
         Vector2 _movementInput;
+        Coroutine _drownRoutine;
         
         public Vector2 MovementInputRaw => _movementInput;
         public Vector2 Facing { get; private set; } = Vector2.down;
         public Rigidbody2D Rb { get; private set; }
         public Vector2 SafePosition { get; private set; }
+        public MovingPlatform Platform { get; private set; } 
         
 
         void Awake()
@@ -52,7 +52,11 @@ namespace FirstDungeon.Scripts.PlayerScripts
             else Rb.velocity = playerVelocity + Platform.PlatformShift / Time.fixedDeltaTime;
         }
 
-        public void Drown(float drowningTime) => StartCoroutine(DrownRoutine(drowningTime));
+        public void Drown(float drowningTime)
+        {
+            if (_drownRoutine != null) return;
+            _drownRoutine = StartCoroutine(DrownRoutine(drowningTime));
+        }
 
         IEnumerator DrownRoutine(float drowningTime)
         {
@@ -64,8 +68,15 @@ namespace FirstDungeon.Scripts.PlayerScripts
             }
             BackToSafe();
             PlayerState.Instance.SetInBog(false);
+            _drownRoutine = null;
         }
 
         public void BackToSafe() => Rb.position = SafePosition;
+
+        public void SetPlatform(MovingPlatform platform)
+        {
+            Platform = platform;
+            PlayerState.Instance.GetInAir(platform != null);
+        }
     }
 }

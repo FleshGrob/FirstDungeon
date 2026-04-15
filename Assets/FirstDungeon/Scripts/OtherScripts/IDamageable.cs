@@ -2,6 +2,6 @@ namespace FirstDungeon.Scripts.OtherScripts
 {
     public interface IDamageable 
     {
-        void TakeDamage(int damage, float stunDuration = 0);
+        void TakeDamage(int damage, float stunTime = 0);
     }
 }
