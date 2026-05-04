@@ -20,19 +20,20 @@ MonoBehaviour:
   AggroRadius: 6
   ChaseMoveSpeed: 3
   AttackRange: 6.5
-  BasicAttackCooldown: 2
-  BasicAttackCastTime: 0.5
+  BasicAttackCooldown: 2.5
+  BasicAttackCastTime: 1
   BasicAttackDamage: 1
-  SpecialAttackCooldown: 5
+  SpecialAttackCooldownMin: 4
+  SpecialAttackCooldownMax: 6
   SpecialAttackCastTime: 1
   SpecialAttackDamage: 2
   DefenseCooldown: 4
   ProjectileDetectRadius: 2
-  PlayerProximityRadius: 0
-  PlayerProximityCooldown: 0
+  PlayerProximityRadius: 3
+  PlayerProximityCooldown: 2
   ProjectileSpeed: 7
   ExplosionStunDuration: 1.5
-  TeleportRadius: 3
+  TeleportRadius: 5
   TeleportTimerInterval: 8
   TeleportMaxAttempts: 15
   TeleportCastTime: 1
