@@ -23,21 +23,21 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void OnTriggerEnter2D(Collider2D collision)
         {
-            FrogProjectile frogProjectile = collision.GetComponent<FrogProjectile>();
-            if (frogProjectile != null)
+            Projectile projectile = collision.GetComponent<Projectile>();
+            if (projectile != null)
             {
-                int frogID = frogProjectile.GetInstanceID();
-                Hit(frogProjectile, frogID);
+                int frogID = projectile.GetInstanceID();
+                Hit(projectile, frogID);
             }
         }
 
-        void Hit(FrogProjectile incomingFrog, int incomingID)
+        void Hit(Projectile incoming, int incomingID)
         {
             if (_manager.IsSolved)
                 return;
             if (_manager.RightID == 0)
             {
-                _manager.GetFrog(incomingID, incomingFrog);
+                _manager.GetFrog(incomingID, incoming);
                 IsActivated = true;
                 _sr.color = _manager.ActiveColor;
             }

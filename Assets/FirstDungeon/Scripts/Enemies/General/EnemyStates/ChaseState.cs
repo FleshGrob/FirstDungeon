@@ -1,0 +1,38 @@
+using FirstDungeon.Scripts.PlayerScripts;
+using UnityEngine;
+
+namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
+{
+    public class ChaseState : IEnemyState
+    {
+        Enemy _enemy;
+    
+        public ChaseState(Enemy enemy)
+        {
+            _enemy = enemy;
+        }
+
+        public void Enter()
+        {
+            _enemy.Move(_enemy.PlayerTransform.position, _enemy.Config.ChaseMoveSpeed);
+        }
+
+        public void Tick()
+        {
+            float dist = Vector2.Distance(_enemy.transform.position, _enemy.PlayerTransform.position);
+
+            if (dist < _enemy.Config.AttackRange)
+            {
+                _enemy.StateMachine.ChangeState(new CombatState(_enemy)); 
+                return;
+            }
+            
+            _enemy.Move(_enemy.PlayerTransform.position, _enemy.Config.ChaseMoveSpeed);
+        }
+
+        public void Exit()
+        {
+            _enemy.Agent.isStopped = true;
+        }
+    }
+}

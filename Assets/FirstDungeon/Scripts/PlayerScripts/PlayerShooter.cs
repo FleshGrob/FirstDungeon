@@ -5,7 +5,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
 {
     public class PlayerShooter : MonoBehaviour
     {
-        [SerializeField] FrogProjectile _projectilePrefab;
+        [SerializeField] Projectile _projectilePrefab;
         [SerializeField] float _projectileSpeed = 7;
         [SerializeField] int _projectileDamage = 1;
         [SerializeField] bool _canShoot;
@@ -46,7 +46,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Vector2 playerPosition = _playerMovement.Rb.position;
             Vector2 spawnPosition = playerPosition + direction * SpawnOffset;
 
-            FrogProjectile projectile = Instantiate(_projectilePrefab, spawnPosition, Quaternion.identity);
+            Projectile projectile = Instantiate(_projectilePrefab, spawnPosition, Quaternion.identity);
             projectile.Launch(direction, _projectileSpeed, _projectileDamage);
         }
     }

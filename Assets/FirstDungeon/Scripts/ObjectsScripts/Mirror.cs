@@ -7,14 +7,14 @@ namespace FirstDungeon.Scripts.ObjectsScripts
     {
         void OnTriggerEnter2D(Collider2D other)
         {
-            FrogProjectile frogProjectile = other.GetComponent<FrogProjectile>();
-            if (frogProjectile != null)
+            Projectile projectile = other.GetComponent<Projectile>();
+            if (projectile != null)
             {
                 Vector2 normal = transform.right;
-                Vector2 dir = frogProjectile.Rb.velocity.normalized;
+                Vector2 dir = projectile.Rb.velocity.normalized;
                 Vector2 newDir = Vector2.Reflect(dir, normal);
 
-                frogProjectile.Reflect(newDir);
+                projectile.Reflect(newDir);
             }
         }
     }

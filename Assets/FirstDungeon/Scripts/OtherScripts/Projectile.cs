@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FirstDungeon.Scripts.OtherScripts
 {
-    public class FrogProjectile : MonoBehaviour
+    public class Projectile : MonoBehaviour
     {
         [SerializeField] Color _darkColor;  
         
@@ -57,6 +57,7 @@ namespace FirstDungeon.Scripts.OtherScripts
         {
             _sr.color = _darkColor;
             IsDark = true;
+            _damage *= 2;
         }
     }
 }

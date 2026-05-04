@@ -34,8 +34,8 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         
         void OnTriggerEnter2D(Collider2D collision)
         {
-            FrogProjectile frogProjectile = collision.GetComponent<FrogProjectile>();
-            if (frogProjectile != null)
+            Projectile projectile = collision.GetComponent<Projectile>();
+            if (projectile != null)
                 Hit();
         }
 

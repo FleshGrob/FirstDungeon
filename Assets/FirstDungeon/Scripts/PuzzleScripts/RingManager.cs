@@ -10,7 +10,7 @@ namespace FirstDungeon.Scripts.PuzzleScripts
         [SerializeField] GameObject _chestPrefab;
         [SerializeField] Transform _chestSpawnPos;
         
-        FrogProjectile _frogProjectile;
+        Projectile _projectile;
         Ring[] _rings;
 
         public Color ActiveColor => _activeColor;
@@ -23,11 +23,11 @@ namespace FirstDungeon.Scripts.PuzzleScripts
             _rings = GetComponentsInChildren<Ring>();
         }
 
-        public void GetFrog(int frogID, FrogProjectile frog)
+        public void GetFrog(int frogID, Projectile frog)
         {
-            _frogProjectile = frog;
+            _projectile = frog;
             RightID = frogID;
-            _frogProjectile.OnDisposed += Fail;
+            _projectile.OnDisposed += Fail;
         }
 
         public void CheckHit()
@@ -51,7 +51,7 @@ namespace FirstDungeon.Scripts.PuzzleScripts
 
         void Fail()
         {
-            _frogProjectile.OnDisposed -= Fail;
+            _projectile.OnDisposed -= Fail;
             if (!IsSolved)
             {
                 Restart();

@@ -20,7 +20,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            FrogProjectile frog = other.GetComponent<FrogProjectile>();
+            Projectile frog = other.GetComponent<Projectile>();
             if (frog != null && frog.IsDark)
                 Hit();
         }

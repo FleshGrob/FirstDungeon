@@ -1,0 +1,52 @@
+using FirstDungeon.Scripts.PlayerScripts;
+using UnityEngine;
+
+namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
+{
+    public class CombatState : IEnemyState
+    {
+        Enemy _enemy;
+        float _basicAttackTimer;
+        float _specialAttackTimer;
+        
+    
+        public CombatState(Enemy enemy)
+        {
+            _enemy = enemy;
+        }
+
+        public void Enter() { }
+
+        public void Tick()
+        {
+            if (_enemy.IsActing) return;
+            
+            float dist = Vector2.Distance(_enemy.transform.position, _enemy.PlayerTransform.position);
+
+            if (dist > _enemy.Config.AttackRange)
+            {
+                _enemy.StateMachine.ChangeState(new ChaseState(_enemy));
+                return;
+            }
+            
+            if (!_enemy.IsPlayerInRoom())
+            {
+                _enemy.StateMachine.ChangeState(new PatrolState(_enemy));
+                return;
+            }
+
+            if (_enemy.BasicAttackTimer <= 0)
+            {
+                _enemy.BasicAttack();
+                _enemy.ResetBasicTimer();
+            }
+            else if (_enemy.SpecialAttackTimer <= 0)
+            {
+                _enemy.SpecialAttack();
+                _enemy.ResetSpecialTimer();
+            }
+        }
+        
+        public void Exit() { }
+    }
+}

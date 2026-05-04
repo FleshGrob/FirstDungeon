@@ -6,7 +6,8 @@ namespace FirstDungeon.Scripts.EffectsScripts
 {
     public class Explosion : MonoBehaviour
     {
-        const int ExplosionDamage = 1;
+        [SerializeField] float _stunTime;
+        [SerializeField] int _explosionDamage;
         const float ExplosionTime = 0.5f;
         
         readonly List<IDamageable> _damageables = new();
@@ -24,7 +25,7 @@ namespace FirstDungeon.Scripts.EffectsScripts
             if (_damageables.Contains(damageable)) return;
             
             _damageables.Add(damageable);
-            damageable.TakeDamage(ExplosionDamage);
+            damageable.TakeDamage(_explosionDamage, _stunTime);
         }
     }
 }
