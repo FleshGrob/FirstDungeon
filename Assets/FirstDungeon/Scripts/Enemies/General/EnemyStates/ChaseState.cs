@@ -14,12 +14,12 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
 
         public void Enter()
         {
-            _enemy.Move(_enemy.PlayerTransform.position, _enemy.Config.ChaseMoveSpeed);
+            _enemy.Move(Player.Instance.Transform.position, _enemy.Config.ChaseMoveSpeed);
         }
 
         public void Tick()
         {
-            float dist = Vector2.Distance(_enemy.transform.position, _enemy.PlayerTransform.position);
+            float dist = Vector2.Distance(_enemy.transform.position, Player.Instance.Transform.position);
 
             if (dist < _enemy.Config.AttackRange)
             {
@@ -27,7 +27,7 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
                 return;
             }
             
-            _enemy.Move(_enemy.PlayerTransform.position, _enemy.Config.ChaseMoveSpeed);
+            _enemy.Move(Player.Instance.Transform.position, _enemy.Config.ChaseMoveSpeed);
         }
 
         public void Exit()

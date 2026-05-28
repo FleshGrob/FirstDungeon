@@ -21,7 +21,7 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
         {
             if (_enemy.IsActing) return;
             
-            float dist = Vector2.Distance(_enemy.transform.position, _enemy.PlayerTransform.position);
+            float dist = Vector2.Distance(_enemy.transform.position, Player.Instance.Transform.position);
 
             if (dist > _enemy.Config.AttackRange)
             {

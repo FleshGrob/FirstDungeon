@@ -55,9 +55,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             
             if (fireHitCol.gameObject.layer == _playerLayer)
             {
-                PlayerMovement playerMovement = fireHitCol.GetComponent<PlayerMovement>();
-                
-                playerMovement.BackToSafe();
+                Player.Instance.Movement.BackToSafe();
             }
         }
         

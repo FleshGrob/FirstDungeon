@@ -1,6 +1,7 @@
 using System.Collections;
 using FirstDungeon.Scripts.EffectsScripts;
 using FirstDungeon.Scripts.OtherScripts;
+using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -62,7 +63,7 @@ public class Mage : Enemy
     
     void LaunchProjectile()
     {
-        Vector2 direction = ((Vector2)PlayerTransform.position - (Vector2)transform.position).normalized;
+        Vector2 direction = ((Vector2)Player.Instance.Transform.position - (Vector2)transform.position).normalized;
         Vector2 spawnPosition = (Vector2)transform.position + direction * SpawnOffset;
         
         Projectile projectile =  Instantiate(_projectilePrefab, spawnPosition, Quaternion.identity);
@@ -72,7 +73,7 @@ public class Mage : Enemy
     IEnumerator CastingExplosionRoutine()
     {
         IsActing  = true;
-        Vector2 targetPosition = PlayerTransform.position;
+        Vector2 targetPosition = Player.Instance.Transform.position;
         GameObject explosionTelegraph = Instantiate(_explosionTelegraph, targetPosition, Quaternion.identity);
         float t = Config.SpecialAttackCastTime;
         while (t > 0)
@@ -97,7 +98,7 @@ public class Mage : Enemy
             Vector2 candidate = (Vector2)transform.position + Random.insideUnitCircle * _config.TeleportRadius;
             
             if (!NavMesh.SamplePosition(candidate, out NavMeshHit hit, 0.5f, NavMesh.AllAreas)) continue;
-            if (Vector2.Distance(hit.position, PlayerTransform.position) <= _config.PlayerProximityRadius) continue;
+            if (Vector2.Distance(hit.position, Player.Instance.Transform.position) <= _config.PlayerProximityRadius) continue;
             {
                 Agent.Warp(hit.position);
                 break;
@@ -116,7 +117,7 @@ public class Mage : Enemy
         
         if (IsActing) return false;
         
-        float dist = Vector2.Distance(transform.position, PlayerTransform.position);
+        float dist = Vector2.Distance(transform.position, Player.Instance.Transform.position);
         if (dist < Config.PlayerProximityRadius) return true;
         
         return false;

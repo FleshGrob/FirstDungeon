@@ -27,7 +27,6 @@ public abstract class Enemy : MonoBehaviour
     public float SpecialAttackTimer { get; private set; }
     public EnemyStateMachine StateMachine { get; private set; }
     public Vector2 HomePosition { get; private set; }
-    public Transform PlayerTransform { get; private set; }
     public NavMeshAgent Agent { get; private set; }
     public Vector2 Facing { get; private set; } = Vector2.down;
     public GameObject Room { get; private set; }
@@ -53,7 +52,6 @@ public abstract class Enemy : MonoBehaviour
     void Start()
     {
         StateMachine.ChangeState(new PatrolState(this));
-        PlayerTransform = Player.Instance.PlayerTransform;
         _roomCol = GetComponentInParent<CompositeCollider2D>();
 
         _hp.OnHurt += Hurt;
@@ -136,7 +134,7 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public bool IsPlayerInRoom() => _roomCol.OverlapPoint(PlayerTransform.position);
+    public bool IsPlayerInRoom() => _roomCol.OverlapPoint(Player.Instance.Transform.position);
     public void ResetBasicTimer() => BasicAttackTimer = Config.BasicAttackCooldown;
     public void ResetSpecialTimer() => SpecialAttackTimer = Random.Range(Config.SpecialAttackCooldownMin, Config.SpecialAttackCooldownMax);
 

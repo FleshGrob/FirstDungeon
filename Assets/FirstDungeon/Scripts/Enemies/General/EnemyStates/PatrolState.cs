@@ -1,3 +1,4 @@
+using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
@@ -25,11 +26,11 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
 
         public void Tick()
         {
-            float dist = Vector2.Distance(_enemy.transform.position, _enemy.PlayerTransform.position);
+            float dist = Vector2.Distance(_enemy.transform.position, Player.Instance.Transform.position);
             if (dist <= _enemy.Config.AggroRadius)
             {
                 RaycastHit2D hit = Physics2D.Linecast(_enemy.transform.position,
-                    _enemy.PlayerTransform.position, _enemy.Obstacle);
+                    Player.Instance.Transform.position, _enemy.Obstacle);
                 if (hit.collider == null)
                 {
                     _enemy.StateMachine.ChangeState(new CombatState(_enemy));
