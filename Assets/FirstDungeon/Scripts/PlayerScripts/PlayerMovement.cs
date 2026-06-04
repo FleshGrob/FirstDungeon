@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using FirstDungeon.Scripts.ObjectsScripts;
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.PlayerScripts
@@ -23,28 +25,24 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Rb = GetComponent<Rigidbody2D>();
         }
 
+        void Start()
+        {
+            InputManager.Instance.OnMoveKeyChanged += GetMovementInput;
+        }
+
         void Update()
         {
-            _movementInput.x = Input.GetAxisRaw("Horizontal");
-            _movementInput.y = Input.GetAxisRaw("Vertical");
-
             float ax = Mathf.Abs(_movementInput.x);
             float ay = Mathf.Abs(_movementInput.y);
 
             if (ax > ay) Facing = _movementInput.x > 0 ? Vector2.right : Vector2.left;
             else if (ay > ax) Facing = _movementInput.y > 0 ? Vector2.up : Vector2.down;
 
-            if (!PlayerState.Instance.IsInBog && PlayerState.Instance.IsSafe) SafePosition = Rb.position;
+            if (!Player.Instance.State.IsInBog && Player.Instance.State.IsSafe) SafePosition = Rb.position;
         }
 
         void FixedUpdate()
         {
-            if (PlayerState.Instance.IsStunned)
-            {
-                Rb.velocity = Vector2.zero;
-                return;
-            }
-
             Vector2 playerVelocity = _speed * _movementInput.normalized;
             
             if (Platform == null)
@@ -52,10 +50,22 @@ namespace FirstDungeon.Scripts.PlayerScripts
             else Rb.velocity = playerVelocity + Platform.PlatformShift / Time.fixedDeltaTime;
         }
 
+        void OnDestroy()
+        {
+            if (InputManager.Instance != null) 
+                InputManager.Instance.OnMoveKeyChanged -= GetMovementInput;
+        }
+        
+        void GetMovementInput(Vector2 input)
+        {
+            _movementInput = input;
+        }
+
         public void Drown(float drowningTime)
         {
             if (_drownRoutine != null) return;
             _drownRoutine = StartCoroutine(DrownRoutine(drowningTime));
+            Player.Instance.State.Stun(drowningTime);
         }
 
         IEnumerator DrownRoutine(float drowningTime)
@@ -67,7 +77,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
                 yield return null;
             }
             BackToSafe();
-            PlayerState.Instance.SetInBog(false);
+            Player.Instance.State.SetInBog(false);
             _drownRoutine = null;
         }
 
@@ -76,7 +86,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public void SetPlatform(MovingPlatform platform)
         {
             Platform = platform;
-            PlayerState.Instance.GetInAir(platform != null);
+            Player.Instance.State.GetInAir(platform != null);
         }
     }
 }

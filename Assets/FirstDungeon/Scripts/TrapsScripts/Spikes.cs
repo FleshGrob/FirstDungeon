@@ -17,7 +17,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             IDamageable damageable = other.GetComponent<IDamageable>();
         
             if (playerMovement == null) return;
-            if (PlayerState.Instance.IsInAir) return;
+            if (Player.Instance.State.IsInAir) return;
             
             damageable.TakeDamage(SpikesDamage, _stunTime);
             playerMovement.BackToSafe();

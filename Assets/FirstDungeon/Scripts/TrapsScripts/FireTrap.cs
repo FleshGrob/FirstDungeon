@@ -51,12 +51,14 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             IDamageable damageable = fireHitCol.GetComponent<IDamageable>(); 
             
             if (damageable == null) return;
-            damageable.TakeDamage(FireDamage, _stunTime);
             
             if (fireHitCol.gameObject.layer == _playerLayer)
             {
-                Player.Instance.Movement.BackToSafe();
+                if (!Player.Instance.State.IsInvulnerable) 
+                    Player.Instance.Movement.BackToSafe();
             }
+            
+            damageable.TakeDamage(FireDamage, _stunTime);
         }
         
         IEnumerator FireRoutine()

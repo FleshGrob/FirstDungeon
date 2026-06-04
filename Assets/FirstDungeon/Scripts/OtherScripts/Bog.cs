@@ -29,9 +29,9 @@ namespace FirstDungeon.Scripts.OtherScripts
         void OnTriggerStay2D(Collider2D other)
         {
             if (_playerMovement == null) return;
-            PlayerState.Instance.SetInBog(true);
+            Player.Instance.State.SetInBog(true);
             
-            if (PlayerState.Instance.IsInAir) return;
+            if (Player.Instance.State.IsInAir) return;
             
             Vector2 playerPos = other.bounds.center;
             
@@ -46,7 +46,7 @@ namespace FirstDungeon.Scripts.OtherScripts
             if (_playerMovement == null) return;
             if (_playerMovement.gameObject != other.gameObject) return;
             
-            PlayerState.Instance.SetInBog(false);
+            Player.Instance.State.SetInBog(false);
             _playerMovement = null;
             _damageable = null;
         }

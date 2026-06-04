@@ -11,16 +11,16 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         public void TakeDamage(int damage, float stunTime = 0)
         {
-            if (PlayerState.Instance.IsInvulnerable) return;
+            if (Player.Instance.State.IsInvulnerable) return;
             
             _health -= damage;
             if (stunTime > 0) 
-                PlayerState.Instance.Stun(stunTime);
+                Player.Instance.State.Stun(stunTime);
             
             if (_health <= 0)
-                PlayerState.Instance.Die();
+                Player.Instance.State.Die();
 
-            PlayerState.Instance.SetInvulnerable();
+            Player.Instance.State.SetInvulnerable();
             
             Debug.Log(_health);
         }

@@ -1,30 +1,20 @@
 using System.Collections;
+using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.PlayerScripts
 {
     public class PlayerState : MonoBehaviour
     {
-        [SerializeField] float _invulnerableTime = 0.5f;
-
-        public static PlayerState Instance { get; private set; }
+        [SerializeField] float _invulnerableTime;
+        
         public bool IsStunned { get; private set; }
         public bool IsInBog { get; private set; }
         public bool IsAlive { get; private set; } = true;
         public bool IsInAir { get; private set; }
         public bool IsSafe { get; private set; } = true;
         public bool IsInvulnerable { get; private set; }
-
-        void Awake()
-        {
-            if (Instance != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-        }
+        
 
         public void SetInBog(bool value) => IsInBog = value;
         public void GetInAir(bool value) => IsInAir = value;
@@ -32,13 +22,13 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         public void Stun(float time)
         { 
-            if (IsInvulnerable) return;
             StartCoroutine(StunRoutine(time)); 
         }
         
         IEnumerator StunRoutine(float time)
         {
             IsStunned = true;
+            InputManager.Instance.BlockGameplay();
 
             float t = 0f;
             while (t < time)
@@ -48,6 +38,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             }
 
             IsStunned = false;
+            InputManager.Instance.UnBlockGameplay();
         }
         
         public void SetInvulnerable() => StartCoroutine(InvulnerableRoutine(_invulnerableTime));

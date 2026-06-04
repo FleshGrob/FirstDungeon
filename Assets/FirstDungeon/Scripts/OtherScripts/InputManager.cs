@@ -1,6 +1,6 @@
 using System;
-using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace FirstDungeon.Scripts.OtherScripts
 {
@@ -10,6 +10,11 @@ namespace FirstDungeon.Scripts.OtherScripts
 
         public event Action OnActionKeyPressed;
         public event Action OnShootKeyPressed;
+        public event Action<Vector2> OnMoveKeyChanged;
+        public event Action OnPauseKeyPressed;
+        
+        NewControls _controls;
+        int _blockCounter;
     
 
         void Awake()
@@ -21,16 +26,50 @@ namespace FirstDungeon.Scripts.OtherScripts
             }
             
             Instance = this;
+            
+            _controls = new NewControls();
+            _controls.Enable();
         }
 
-        void Update()
+        void Start()
         {
-            if (PlayerState.Instance.IsStunned)
-                return;
-            if (Input.GetKeyDown(GameKeys.Action))
-                OnActionKeyPressed?.Invoke();
-            if (Input.GetKeyDown(GameKeys.Shoot))
-                OnShootKeyPressed?.Invoke();
+            _controls.GamePlay.Action.performed += PressAction;
+            
+            _controls.GamePlay.Shoot.performed += PressShoot;
+            
+            _controls.GamePlay.Move.performed += ChangeMove;
+            _controls.GamePlay.Move.canceled += ChangeMove;
+            
+            _controls.UI.Pause.performed += PressPause;
+        }
+
+        void OnDestroy()
+        {
+            _controls.GamePlay.Action.performed -= PressAction;
+            
+            _controls.GamePlay.Shoot.performed -= PressShoot;
+            
+            _controls.GamePlay.Move.performed -= ChangeMove;
+            _controls.GamePlay.Move.canceled -= ChangeMove;
+            
+            _controls.UI.Pause.performed -= PressPause;
+        }
+        
+        void PressAction(InputAction.CallbackContext ctx) => OnActionKeyPressed?.Invoke();
+        void PressShoot(InputAction.CallbackContext ctx) => OnShootKeyPressed?.Invoke();
+        void ChangeMove(InputAction.CallbackContext ctx) => OnMoveKeyChanged?.Invoke(ctx.ReadValue<Vector2>());
+        void PressPause(InputAction.CallbackContext ctx) =>  OnPauseKeyPressed?.Invoke();
+
+        public void BlockGameplay()
+        {
+            _blockCounter++;
+            _controls.GamePlay.Disable();
+        }
+
+        public void UnBlockGameplay()
+        {
+            _blockCounter--;
+            if (_blockCounter <= 0) _controls.GamePlay.Enable();
         }
     }
 }

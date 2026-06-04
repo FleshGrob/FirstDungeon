@@ -16,6 +16,11 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
             Instance = this;
 
             Transform = transform;

@@ -10,14 +10,14 @@ namespace FirstDungeon.Scripts.PlayerScripts
         void OnTriggerEnter2D(Collider2D other)
         {
             _hazardCount++;
-            PlayerState.Instance.SetSafe(false);
+            Player.Instance.State.SetSafe(false);
         }
 
         void OnTriggerExit2D(Collider2D other)
         {
             _hazardCount--;
             if (_hazardCount == 0) 
-                PlayerState.Instance.SetSafe(true);
+                Player.Instance.State.SetSafe(true);
         }
     }
 }
