@@ -1,8 +1,8 @@
 using Cinemachine;
-using FirstDungeon.Scripts.PlayerScripts; 
+using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
-namespace FirstDungeon.Scripts.OtherScripts
+namespace FirstDungeon.Scripts.Managers
 {
     public class RoomCameraManager : MonoBehaviour
     {
@@ -19,7 +19,7 @@ namespace FirstDungeon.Scripts.OtherScripts
 
         void Start()
         {
-            Vector2 playerPosition = Player.Instance.transform.position;
+            Vector2 playerPosition = Player.Instance.Transform.position;
             
             if (_col.OverlapPoint(playerPosition))
                 _confiner.m_BoundingShape2D = _col;
@@ -39,7 +39,7 @@ namespace FirstDungeon.Scripts.OtherScripts
         {
             if (Player.Instance == null) return;
             if (other.gameObject != Player.Instance.gameObject) return;
-            if (_col.OverlapPoint(Player.Instance.transform.position)) return;
+            if (_col.OverlapPoint(Player.Instance.Transform.position)) return;
 
             _confiner.m_BoundingShape2D = null;
         }

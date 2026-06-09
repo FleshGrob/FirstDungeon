@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
+using FirstDungeon.Scripts.Managers;
 using FirstDungeon.Scripts.ObjectsScripts;
-using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.PlayerScripts

@@ -6,7 +6,6 @@ namespace FirstDungeon.Scripts.PlayerScripts
     public class PlayerBoxPusher : MonoBehaviour
     {
         [SerializeField] LayerMask pushableMask;
-        [SerializeField] PlayerBoxGrabPull grabPull;
 
         [Header("Push hold (no grab)")]
         [SerializeField] float pushHoldSeconds = 0.33f; 
@@ -27,7 +26,6 @@ namespace FirstDungeon.Scripts.PlayerScripts
         void Awake()
         {
             movement = GetComponent<PlayerMovement>();
-            if (grabPull == null) grabPull = GetComponent<PlayerBoxGrabPull>();
         }
 
         Vector2 SnapTo4(Vector2 v)
@@ -93,9 +91,6 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         void OnCollisionStay2D(Collision2D collision)
         {
-            if (grabPull != null && grabPull.IsGrabbing)
-                return;
-
             int otherLayer = collision.gameObject.layer;
             if ((pushableMask.value & (1 << otherLayer)) == 0)
                 return;

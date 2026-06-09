@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace FirstDungeon.Scripts.OtherScripts
+namespace FirstDungeon.Scripts.Managers
 {
     public class InputManager : MonoBehaviour
     {
@@ -29,6 +29,8 @@ namespace FirstDungeon.Scripts.OtherScripts
             
             _controls = new NewControls();
             _controls.Enable();
+            
+            DontDestroyOnLoad(gameObject);
         }
 
         void Start()
