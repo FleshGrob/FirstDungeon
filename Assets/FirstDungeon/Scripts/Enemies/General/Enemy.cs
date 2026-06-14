@@ -13,7 +13,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] GameObject _corpsePrefab;
     [SerializeField] LayerMask _projectileLayer;
     
-    const float HitTime = 0.5f;
+    const float HurtTime = 0.5f;
     float _defenseTimer;
     
     protected Rigidbody2D _rb;
@@ -124,7 +124,7 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator HurtRoutine()
     {
         _sr.color = Color.red;
-        yield return new WaitForSeconds(HitTime);
+        yield return new WaitForSeconds(HurtTime);
         _sr.color = _originalColor;
     }
     

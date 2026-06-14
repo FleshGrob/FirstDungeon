@@ -19,7 +19,7 @@ TagManager:
   - Fence
   - Pushable
   - Solid
-  - Trigger
+  - Ground
   - Bog
   - Room
   - Platforms
