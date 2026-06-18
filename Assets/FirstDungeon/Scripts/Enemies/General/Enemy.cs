@@ -62,6 +62,13 @@ public abstract class Enemy : MonoBehaviour
     {
         BasicAttackTimer -= Time.deltaTime;
         SpecialAttackTimer -= Time.deltaTime;
+        
+        if (!IsPlayerInRoom() && !(StateMachine.CurrentState is PatrolState))
+        {
+            StateMachine.ChangeState(new PatrolState(this));
+            return;
+        }
+        
         StateMachine.Tick();
         
         if (ShouldDefend())

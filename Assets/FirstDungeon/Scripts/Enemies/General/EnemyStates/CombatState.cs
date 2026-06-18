@@ -28,12 +28,6 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
                 _enemy.StateMachine.ChangeState(new ChaseState(_enemy));
                 return;
             }
-            
-            if (!_enemy.IsPlayerInRoom())
-            {
-                _enemy.StateMachine.ChangeState(new PatrolState(_enemy));
-                return;
-            }
 
             if (_enemy.BasicAttackTimer <= 0)
             {

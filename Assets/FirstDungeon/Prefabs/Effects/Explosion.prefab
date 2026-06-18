@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stunTime: 1.5
-  _explosionDamage: 2
+  _explosionDamage: 1
 --- !u!50 &7301893290244401182
 Rigidbody2D:
   serializedVersion: 4
