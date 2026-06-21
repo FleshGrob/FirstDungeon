@@ -11,7 +11,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             if (projectile != null)
             {
                 Vector2 normal = transform.right;
-                Vector2 dir = projectile.Rb.velocity.normalized;
+                Vector2 dir = projectile.Rb.linearVelocity.normalized;
                 Vector2 newDir = Vector2.Reflect(dir, normal);
 
                 projectile.Reflect(newDir);

@@ -114,7 +114,7 @@ public abstract class Enemy : MonoBehaviour
             if (projectile == null) continue;
             
             Vector2 toMage = (Vector2)transform.position - (Vector2)projectile.transform.position;
-            float dot = Vector2.Dot(projectile.Rb.velocity, toMage);
+            float dot = Vector2.Dot(projectile.Rb.linearVelocity, toMage);
             if (dot > 0)
                 return true;
         }

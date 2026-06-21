@@ -45,12 +45,12 @@ namespace FirstDungeon.Scripts.OtherScripts
         {
             _speed = speed;
             _damage = damage;
-            Rb.velocity = direction * speed;
+            Rb.linearVelocity = direction * speed;
         }
 
         public void Reflect(Vector2 newDirection)
         {
-            Rb.velocity = newDirection * _speed;
+            Rb.linearVelocity = newDirection * _speed;
         }
 
         public void TurnDark()

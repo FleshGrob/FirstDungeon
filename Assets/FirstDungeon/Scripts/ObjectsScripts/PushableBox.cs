@@ -25,7 +25,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             col = GetComponent<Collider2D>();
 
             if (grid == null)
-                grid = FindObjectOfType<Grid>();
+                grid = FindFirstObjectByType<Grid>();
 
             if (grid != null)
                 rb.position = CellCenter(rb.position);

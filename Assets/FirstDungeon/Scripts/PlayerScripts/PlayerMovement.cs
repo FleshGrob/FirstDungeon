@@ -45,8 +45,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Vector2 playerVelocity = _speed * _movementInput.normalized;
             
             if (Platform == null)
-                Rb.velocity = playerVelocity;
-            else Rb.velocity = playerVelocity + Platform.PlatformShift / Time.fixedDeltaTime;
+                Rb.linearVelocity = playerVelocity;
+            else Rb.linearVelocity = playerVelocity + Platform.PlatformShift / Time.fixedDeltaTime;
         }
 
         void OnDestroy()

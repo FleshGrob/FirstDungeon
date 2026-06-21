@@ -24,7 +24,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         public void Launch(float speed, Vector2 direction)
         {
-            _rb.velocity = direction.normalized * speed;
+            _rb.linearVelocity = direction.normalized * speed;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace FirstDungeon.Scripts.Managers
         
         void Awake()
         {
-            _virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            _virtualCamera = FindFirstObjectByType<CinemachineVirtualCamera>();
             _confiner = _virtualCamera.GetComponent<CinemachineConfiner2D>();
             _col = GetComponent<CompositeCollider2D>();
         }
