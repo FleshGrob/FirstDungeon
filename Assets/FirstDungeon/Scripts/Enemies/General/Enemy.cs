@@ -19,10 +19,10 @@ public abstract class Enemy : MonoBehaviour
     protected Rigidbody2D _rb;
     protected Collider2D _col;
     protected SpriteRenderer _sr;
+    protected Collider2D _roomCol;
     EnemyHealth _hp;
     Color _originalColor;
-    Collider2D _roomCol;
-
+    
     public float BasicAttackTimer { get; private set; }
     public float SpecialAttackTimer { get; private set; }
     public EnemyStateMachine StateMachine { get; private set; }

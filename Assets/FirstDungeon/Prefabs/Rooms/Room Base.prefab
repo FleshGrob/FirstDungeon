@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3466223202521692922}
   - component: {fileID: 745265354136613969}
   - component: {fileID: 476952448947228156}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: TileMaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2721163935461761299}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Traps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3744228579431344401}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Objects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 8800130343155791445}
   - component: {fileID: 8729761666433104728}
   - component: {fileID: 5041362179729428356}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Decor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -719,7 +719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1268356020466471944}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Puzzles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -754,7 +754,7 @@ GameObject:
   - component: {fileID: 8062139293945140319}
   - component: {fileID: 3114928703945969703}
   - component: {fileID: 6623590672029319727}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Room Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -771,7 +771,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3466223202521692922}
@@ -886,7 +886,7 @@ CompositeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
+  m_GeometryType: 1
   m_GenerationType: 0
   m_EdgeRadius: 0
   m_ColliderPaths:
@@ -1292,7 +1292,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6814282334114442571}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}

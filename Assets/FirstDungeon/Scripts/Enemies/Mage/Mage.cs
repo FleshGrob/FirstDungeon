@@ -13,7 +13,7 @@ public class Mage : Enemy
     [SerializeField] GameObject _explosionTelegraph;
     
     
-    const float SpawnOffset = 1f;
+    const float ProjectileOffset = 1f;
     float _proximityTimer;
     
     public override EnemyConfig Config => _config;
@@ -64,7 +64,7 @@ public class Mage : Enemy
     void LaunchProjectile()
     {
         Vector2 direction = ((Vector2)Player.Instance.Transform.position - (Vector2)transform.position).normalized;
-        Vector2 spawnPosition = (Vector2)transform.position + direction * SpawnOffset;
+        Vector2 spawnPosition = (Vector2)transform.position + direction * ProjectileOffset;
         
         Projectile projectile =  Instantiate(_projectilePrefab, spawnPosition, Quaternion.identity);
         projectile.Launch(direction, _config.ProjectileSpeed, _config.BasicAttackDamage);
@@ -99,6 +99,7 @@ public class Mage : Enemy
             
             if (!NavMesh.SamplePosition(candidate, out NavMeshHit hit, 0.5f, NavMesh.AllAreas)) continue;
             if (Vector2.Distance(hit.position, Player.Instance.Transform.position) <= _config.PlayerProximityRadius) continue;
+            if (!_roomCol.OverlapPoint(hit.position)) continue;
             {
                 Agent.Warp(hit.position);
                 break;

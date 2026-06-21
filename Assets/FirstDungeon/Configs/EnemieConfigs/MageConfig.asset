@@ -30,7 +30,7 @@ MonoBehaviour:
   DefenseCooldown: 4
   ProjectileDetectRadius: 2
   PlayerProximityRadius: 3
-  PlayerProximityCooldown: 2
+  PlayerProximityCooldown: 4
   ProjectileSpeed: 7
   ExplosionStunDuration: 1.5
   TeleportRadius: 5
