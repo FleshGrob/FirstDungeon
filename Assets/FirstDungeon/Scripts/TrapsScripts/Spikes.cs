@@ -53,6 +53,9 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void OnTriggerExit2D(Collider2D other)
         {
+            if (_playerMovement == null) return;
+            if (_playerMovement.gameObject != other.gameObject) return;
+            
             _playerMovement = null;
             _damageable = null;
         }
