@@ -25,7 +25,13 @@ namespace FirstDungeon.Scripts.EffectsScripts
             if (_damageables.Contains(damageable)) return;
             
             _damageables.Add(damageable);
-            damageable.TakeDamage(_explosionDamage, _stunTime);
+
+            Damage damage = new Damage
+            {
+                Amount = _explosionDamage,
+                StunDuration = _stunTime,
+            };
+            damageable.TakeDamage(damage);
         }
     }
 }

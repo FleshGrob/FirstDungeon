@@ -36,8 +36,13 @@ namespace FirstDungeon.Scripts.OtherScripts
             Vector2 playerPos = other.bounds.center;
             
             if (!_bogCol.OverlapPoint(playerPos)) return;
-            
-            _damageable.TakeDamage(_damage, _drownTime);
+
+            Damage damage = new Damage
+            {
+                Amount = _damage,
+                StunDuration = _drownTime,
+            };
+            _damageable.TakeDamage(damage);
             _playerMovement.Drown(_drownTime);
         }
 

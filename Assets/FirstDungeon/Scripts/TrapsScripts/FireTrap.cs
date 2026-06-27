@@ -8,15 +8,14 @@ namespace FirstDungeon.Scripts.ObjectsScripts
     public class FireTrap : MonoBehaviour
     {
         [SerializeField] LayerMask _stopLayer;
-        [SerializeField] float _trapRange;
+        [SerializeField] int _damage;
         [SerializeField] float _stunTime;
         [SerializeField] float _fireTimer;
         [SerializeField] float _startDelay;
-    
-        const int FireDamage = 1;
+        [SerializeField] float _trapRange;
+        
         SpriteRenderer _fireRaySr;
         GameObject _fireRay;
-        int _playerLayer;
         bool _isBurning;
 
 
@@ -24,7 +23,6 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         {
             _fireRay =  transform.GetChild(0).gameObject;
             _fireRaySr = _fireRay.GetComponent<SpriteRenderer>();
-            _playerLayer =  LayerMask.NameToLayer("Player");
         }
 
         void OnEnable()
@@ -52,13 +50,13 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             
             if (damageable == null) return;
             
-            if (fireHitCol.gameObject.layer == _playerLayer)
+            Damage damage = new Damage
             {
-                if (!Player.Instance.State.IsInvulnerable) 
-                    Player.Instance.Movement.BackToSafe();
-            }
-            
-            damageable.TakeDamage(FireDamage, _stunTime);
+                Amount = _damage,
+                StunDuration = _stunTime,
+                DamageType = Damage.Type.Trap,
+            };
+            damageable.TakeDamage(damage);
         }
         
         IEnumerator FireRoutine()

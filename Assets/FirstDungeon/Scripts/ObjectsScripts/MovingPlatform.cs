@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
@@ -5,14 +6,13 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class MovingPlatform : MonoBehaviour
     { 
-        [SerializeField] Transform _spot1;
-        [SerializeField] Transform _spot2;
         [SerializeField] float _speed = 1;
         
         Rigidbody2D _rb;
         Collider2D _col;
         PlayerMovement _playerMovement;
         Vector2 _currentTarget;
+        List<Vector2> _childrenPositions = new();
         
         public Vector2 PlatformShift { get; private set; }
         
@@ -21,13 +21,21 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         {
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<Collider2D>();
-            _currentTarget = _spot2.position;
+            
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                _childrenPositions.Add(child.position);
+                Destroy(child.gameObject);
+            }
+            
+            _currentTarget = _childrenPositions[1];
         }
         
         void FixedUpdate()
         {
-            Vector2 targetPosition1 = _spot1.position;
-            Vector2 targetPosition2 = _spot2.position;
+            Vector2 targetPosition1 = _childrenPositions[0];
+            Vector2 targetPosition2 = _childrenPositions[1];
             Vector2 previousPosition = _rb.position;
             
             if (_rb.position == targetPosition1)

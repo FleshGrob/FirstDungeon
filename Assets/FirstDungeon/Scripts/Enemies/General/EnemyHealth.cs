@@ -13,10 +13,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         _hp = GetComponent<Enemy>().Config.Hp;
     }
 
-    public void TakeDamage(int damage, float stunTime)
+    public int TakeDamage(Damage damage)
     {
-        _hp -= damage;
+        _hp -= damage.Amount;
         if (_hp <= 0) OnDeath?.Invoke();
-        OnHurt?.Invoke();
+        if (_hp > 0) OnHurt?.Invoke();
+        
+        return damage.Amount;
     }
 }

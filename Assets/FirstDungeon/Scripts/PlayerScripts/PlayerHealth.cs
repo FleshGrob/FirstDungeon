@@ -5,27 +5,27 @@ namespace FirstDungeon.Scripts.PlayerScripts
 {
     public class PlayerHealth : MonoBehaviour, IDamageable
     {
-        int _health = 5;
-        int _maxHealth = 5;
+        int _health = 6;
+        int _maxHealth = 6;
     
 
-        public void TakeDamage(int damage, float stunTime = 0)
+        public int TakeDamage(Damage damage)
         {
-            if (Player.Instance.State.IsInvulnerable) return;
-            
-            _health -= damage;
-            if (stunTime > 0) 
-                Player.Instance.State.Stun(stunTime);
-            
-            if (_health <= 0)
-                Player.Instance.State.Die();
+            if (Player.Instance.State.IsInvulnerable) return 0;
+            if (damage.DamageType == Damage.Type.Trap)
+            {
+                if (Player.Instance.State.IsInAir) return 0;
+                Player.Instance.Movement.BackToSafe();
+            }
+            _health -= damage.Amount;
+            if (damage.StunDuration > 0) 
+                Player.Instance.State.Stun(damage.StunDuration);
 
             Player.Instance.State.SetInvulnerable();
             
             Debug.Log(_health);
+            return damage.Amount;
         }
-
-        
 
         public void Heal(int hp)
         {

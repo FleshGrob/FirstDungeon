@@ -17,8 +17,15 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void OnCollisionEnter2D(Collision2D other)
         {
             IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
-            
-            if (damageable != null) damageable.TakeDamage(SpearDamage);
+
+            if (damageable != null)
+            {
+                Damage damage = new Damage
+                {
+                    Amount = SpearDamage,
+                };
+                damageable.TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
 

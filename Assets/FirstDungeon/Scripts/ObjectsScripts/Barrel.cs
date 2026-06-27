@@ -5,9 +5,10 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class Barrel : MonoBehaviour, IDamageable
     {
-        public void TakeDamage(int  damage, float stunTime)
+        public int TakeDamage(Damage damage)
         {
             Destroy(gameObject);
+            return damage.Amount;
         }
     }
 }

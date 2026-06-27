@@ -32,7 +32,13 @@ namespace FirstDungeon.Scripts.OtherScripts
             
             IDamageable damageable = other.GetComponent<IDamageable>();
             if (damageable != null)
-                damageable.TakeDamage(_damage);
+            {
+                Damage damage = new Damage
+                {
+                    Amount = _damage,
+                };
+                damageable.TakeDamage(damage);
+            }
             Destroy(gameObject);  
         }
         

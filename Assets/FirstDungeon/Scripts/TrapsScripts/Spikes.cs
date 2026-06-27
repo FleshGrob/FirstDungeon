@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using FirstDungeon.Scripts.OtherScripts;
 using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
@@ -8,18 +9,17 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class Spikes : MonoBehaviour
     {
+        [SerializeField] int _damage;
         [SerializeField] float _stunTime;
         [SerializeField] float _startDelay;
         [SerializeField] float _activeTime;
         [SerializeField] Sprite _activeSprite;
         
-        const int SpikesDamage = 1;
         bool _isActive;
         bool _isActivating;
-        PlayerMovement _playerMovement;
-        IDamageable _damageable;
         SpriteRenderer _spriteRenderer;
         Sprite _inactiveSprite;
+        List<IDamageable> _damageables = new();
 
 
         void Awake()
@@ -30,12 +30,11 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            if (_playerMovement != null) return;
+            IDamageable damageable = other.GetComponent<IDamageable>();
+            if (damageable == null) return;
             
-            _playerMovement = other.GetComponent<PlayerMovement>();
-            _damageable = other.GetComponent<IDamageable>();
+            _damageables.Add(damageable);
             
-
             if (_isActivating) return;
             StartCoroutine(ActivationRoutine());
         }
@@ -43,21 +42,26 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void Update()
         {
             if (!_isActive) return;
-            if (_playerMovement == null) return;
-            if (Player.Instance.State.IsInAir) return;
-            if (Player.Instance.State.IsInvulnerable) return; 
             
-            Player.Instance.Movement.BackToSafe();
-            _damageable.TakeDamage(SpikesDamage, _stunTime);
+            Damage damage = new Damage
+            {
+                Amount = _damage,
+                StunDuration = _stunTime,
+                DamageType = Damage.Type.Trap,
+            };
+            
+            foreach (IDamageable damageable in _damageables)
+            { 
+                damageable.TakeDamage(damage);
+            }
         }
 
         void OnTriggerExit2D(Collider2D other)
         {
-            if (_playerMovement == null) return;
-            if (_playerMovement.gameObject != other.gameObject) return;
+            IDamageable damageable = other.GetComponent<IDamageable>();
             
-            _playerMovement = null;
-            _damageable = null;
+            if (damageable == null) return;
+            _damageables.Remove(damageable);
         }
 
         IEnumerator ActivationRoutine()

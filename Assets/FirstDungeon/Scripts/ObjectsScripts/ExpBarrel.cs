@@ -9,10 +9,11 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         [SerializeField] Explosion _explosion;
         
         
-        public void TakeDamage(int  damage, float stunTime)
+        public int TakeDamage(Damage damage)
         {
             Instantiate(_explosion, transform.position, transform.rotation);
             Destroy(gameObject);
+            return damage.Amount;
         }
     }
 }

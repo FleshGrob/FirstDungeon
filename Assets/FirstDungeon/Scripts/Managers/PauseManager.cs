@@ -7,7 +7,7 @@ namespace FirstDungeon.Scripts.Managers
     {
         public static PauseManager Instance { get; private set; }
         
-        bool IsPaused;
+        public bool IsPaused { get; private set; }
         public event Action OnPause;
         public event Action OnResume;
 

@@ -24,12 +24,15 @@ public class BlenderTrap : MonoBehaviour
     
     void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.GetComponent<Player>() == null) return;
-        if (Player.Instance.State.IsInAir) return;
-        if (Player.Instance.State.IsInvulnerable) return; 
-        
         IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
-        damageable.TakeDamage(_damage, _stunTime);
-        Player.Instance.Movement.BackToSafe();
+        if (damageable == null) return;
+        
+        Damage damage = new Damage
+        {
+            Amount = _damage,
+            StunDuration = _stunTime,
+            DamageType = Damage.Type.Trap,
+        };
+        damageable.TakeDamage(damage);
     }
 }
