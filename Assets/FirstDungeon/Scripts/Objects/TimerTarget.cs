@@ -6,7 +6,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class TimerTarget : MonoBehaviour
     { 
-        TTManager _manager;
+        TimerTargetManager _manager;
         Color _idleColor;
         SpriteRenderer _sr;
 
@@ -18,7 +18,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void Awake()
         {
             _sr = GetComponent<SpriteRenderer>();
-            _manager = GetComponentInParent<TTManager>();
+            _manager = GetComponentInParent<TimerTargetManager>();
             _idleColor = _sr.color;
         }
 

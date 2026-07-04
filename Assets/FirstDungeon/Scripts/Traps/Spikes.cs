@@ -47,7 +47,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
             {
                 Amount = _damage,
                 StunDuration = _stunTime,
-                DamageType = Damage.Type.Trap,
+                DamageType = Damage.Type.GroundHazard,
             };
             
             foreach (IDamageable damageable in _damageables)

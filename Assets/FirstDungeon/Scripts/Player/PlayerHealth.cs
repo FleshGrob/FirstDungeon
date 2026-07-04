@@ -12,11 +12,17 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public int TakeDamage(Damage damage)
         {
             if (Player.Instance.State.IsInvulnerable) return 0;
-            if (damage.DamageType == Damage.Type.Trap)
+            if (damage.DamageType == Damage.Type.GroundHazard)
             {
                 if (Player.Instance.State.IsInAir) return 0;
                 Player.Instance.Movement.BackToSafe();
             }
+            
+            if (damage.DamageType == Damage.Type.Trap)
+            {
+                Player.Instance.Movement.BackToSafe();
+            }
+            
             _health -= damage.Amount;
             if (damage.StunDuration > 0) 
                 Player.Instance.State.Stun(damage.StunDuration);

@@ -1,7 +1,7 @@
 using FirstDungeon.Scripts.EffectsScripts;
 using UnityEngine;
 
-public class BreakebleWall : MonoBehaviour
+public class BreakableWall : MonoBehaviour
 {
 
     void OnTriggerEnter2D(Collider2D other)

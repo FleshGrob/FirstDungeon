@@ -3,41 +3,39 @@ using UnityEngine;
 
 namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    public class TTManager : MonoBehaviour
+    public class ChaosTargetManager : MonoBehaviour
     {
-        [SerializeField] float _fullTimer;
-        [SerializeField] Color _activeColor;
         [SerializeField] GameObject _chestPrefab;
         [SerializeField] Transform _chestSpawnPos;
+        [SerializeField] Color _activeColor;
         
-        TimerTarget[] _targets;
+        ChaosTarget[] _targets;
 
-        public Color ActiveColor => _activeColor;
-        public float FullTimer => _fullTimer; 
         public bool IsSolved { get; private set; }
-        
+        public Color ActiveColor => _activeColor; 
+
 
         void Awake()
         {
-            _targets = GetComponentsInChildren<TimerTarget>();
+            _targets = GetComponentsInChildren<ChaosTarget>();
         }
 
         public void OnTargetHit()
         {
             if (IsSolved)
                 return;
-
-            foreach (TimerTarget t in _targets)
+            
+            foreach (ChaosTarget t in _targets)
             {
                 if (!t.IsActivated) return;
             }
-            
+
             Solve();
         }
-        
+
         void Solve()
         {
-            IsSolved = true;
+            IsSolved = true; 
             Instantiate(_chestPrefab, _chestSpawnPos.position, Quaternion.identity);
         }
     }

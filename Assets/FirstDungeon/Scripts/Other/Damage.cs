@@ -3,7 +3,8 @@ public struct Damage
     public enum Type
     {
         Normal,
-        Trap
+        Trap,
+        GroundHazard
     }
 
     public int Amount;

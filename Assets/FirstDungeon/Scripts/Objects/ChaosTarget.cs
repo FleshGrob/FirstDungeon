@@ -6,7 +6,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class ChaosTarget : MonoBehaviour
     {
-        ChTManager _manager;
+        ChaosTargetManager _manager;
         SpriteRenderer _spriteRenderer;
 
         public bool IsActivated { get; private set; }
@@ -15,7 +15,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _manager = GetComponentInParent<ChTManager>();
+            _manager = GetComponentInParent<ChaosTargetManager>();
         }
 
         void OnTriggerEnter2D(Collider2D other)

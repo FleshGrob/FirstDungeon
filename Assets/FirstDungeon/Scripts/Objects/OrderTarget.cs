@@ -6,7 +6,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class OrderTarget : MonoBehaviour
     {
-        OTManager _manager;
+        OrderTargetManager _manager;
         SpriteRenderer _sr;
         Color _idleColor;
 
@@ -14,7 +14,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void Awake()
         {
             _sr = GetComponent<SpriteRenderer>();
-            _manager = GetComponentInParent<OTManager>();
+            _manager = GetComponentInParent<OrderTargetManager>();
             _idleColor = _sr.color;
         }
         

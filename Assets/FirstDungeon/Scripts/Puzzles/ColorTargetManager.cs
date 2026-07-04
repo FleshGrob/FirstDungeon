@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FirstDungeon.Scripts.PuzzleScripts
 {
-    public class CTManager : MonoBehaviour
+    public class ColorTargetManager : MonoBehaviour
     {
         [SerializeField] Color[] _cycleColors;
         [SerializeField] GameObject _chestPrefab;

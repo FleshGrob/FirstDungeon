@@ -6,7 +6,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 {
     public class ColorTarget : MonoBehaviour
     {
-        CTManager _manager;
+        ColorTargetManager _manager;
         SpriteRenderer _spriteRenderer;
         int _colorIndex;
 
@@ -16,7 +16,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _manager = GetComponentInParent<CTManager>();
+            _manager = GetComponentInParent<ColorTargetManager>();
             _colorIndex = _manager.CycleColors.Length - 1;
         }
 
