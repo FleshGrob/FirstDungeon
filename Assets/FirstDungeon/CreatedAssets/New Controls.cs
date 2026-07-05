@@ -114,7 +114,25 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                     ""name"": ""Action"",
                     ""type"": ""Button"",
                     ""id"": ""f835c6ef-ec7d-418f-b9a7-658aec2aa371"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shapeshift"",
+                    ""type"": ""Button"",
+                    ""id"": ""49b4155a-08fa-404d-8acd-0c4d6a33b336"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability"",
+                    ""type"": ""Button"",
+                    ""id"": ""5d2f2c7b-992e-4fca-b11e-82dece9039be"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -197,6 +215,28 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                     ""action"": ""Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25a2cc6a-583c-48a6-b64c-dbcc2488492b"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shapeshift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90088d9f-155f-4bca-8d77-a5991d10596d"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -236,6 +276,8 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
         m_GamePlay_Move = m_GamePlay.FindAction("Move", throwIfNotFound: true);
         m_GamePlay_Shoot = m_GamePlay.FindAction("Shoot", throwIfNotFound: true);
         m_GamePlay_Action = m_GamePlay.FindAction("Action", throwIfNotFound: true);
+        m_GamePlay_Shapeshift = m_GamePlay.FindAction("Shapeshift", throwIfNotFound: true);
+        m_GamePlay_Ability = m_GamePlay.FindAction("Ability", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
@@ -323,6 +365,8 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_Move;
     private readonly InputAction m_GamePlay_Shoot;
     private readonly InputAction m_GamePlay_Action;
+    private readonly InputAction m_GamePlay_Shapeshift;
+    private readonly InputAction m_GamePlay_Ability;
     /// <summary>
     /// Provides access to input actions defined in input action map "GamePlay".
     /// </summary>
@@ -346,6 +390,14 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GamePlay/Action".
         /// </summary>
         public InputAction @Action => m_Wrapper.m_GamePlay_Action;
+        /// <summary>
+        /// Provides access to the underlying input action "GamePlay/Shapeshift".
+        /// </summary>
+        public InputAction @Shapeshift => m_Wrapper.m_GamePlay_Shapeshift;
+        /// <summary>
+        /// Provides access to the underlying input action "GamePlay/Ability".
+        /// </summary>
+        public InputAction @Ability => m_Wrapper.m_GamePlay_Ability;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -381,6 +433,12 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
             @Action.started += instance.OnAction;
             @Action.performed += instance.OnAction;
             @Action.canceled += instance.OnAction;
+            @Shapeshift.started += instance.OnShapeshift;
+            @Shapeshift.performed += instance.OnShapeshift;
+            @Shapeshift.canceled += instance.OnShapeshift;
+            @Ability.started += instance.OnAbility;
+            @Ability.performed += instance.OnAbility;
+            @Ability.canceled += instance.OnAbility;
         }
 
         /// <summary>
@@ -401,6 +459,12 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
             @Action.started -= instance.OnAction;
             @Action.performed -= instance.OnAction;
             @Action.canceled -= instance.OnAction;
+            @Shapeshift.started -= instance.OnShapeshift;
+            @Shapeshift.performed -= instance.OnShapeshift;
+            @Shapeshift.canceled -= instance.OnShapeshift;
+            @Ability.started -= instance.OnAbility;
+            @Ability.performed -= instance.OnAbility;
+            @Ability.canceled -= instance.OnAbility;
         }
 
         /// <summary>
@@ -558,6 +622,20 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAction(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Shapeshift" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShapeshift(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Ability" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAbility(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

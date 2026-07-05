@@ -1,5 +1,4 @@
 using FirstDungeon.Scripts.OtherScripts;
-using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 using System.Collections;
 

@@ -22,7 +22,7 @@ public abstract class Enemy : MonoBehaviour
     protected Collider2D _roomCol;
     EnemyHealth _hp;
     Color _originalColor;
-    
+
     public float BasicAttackTimer { get; private set; }
     public float SpecialAttackTimer { get; private set; }
     public EnemyStateMachine StateMachine { get; private set; }
@@ -33,6 +33,8 @@ public abstract class Enemy : MonoBehaviour
     public bool IsActing { get; protected set; }
     public abstract EnemyConfig Config { get; }
     public LayerMask Obstacle => _obstacle;
+
+    [SerializeField] protected bool _isStunned;
    
     
     void Awake()
@@ -62,6 +64,8 @@ public abstract class Enemy : MonoBehaviour
     {
         BasicAttackTimer -= Time.deltaTime;
         SpecialAttackTimer -= Time.deltaTime;
+        
+        if (_isStunned) return;
         
         if (!IsPlayerInRoom() && !(StateMachine.CurrentState is PatrolState))
         {
@@ -140,7 +144,7 @@ public abstract class Enemy : MonoBehaviour
         Instantiate(_corpsePrefab, transform.position, _corpsePrefab.transform.rotation);
         Destroy(gameObject);
     }
-
+    
     public bool IsPlayerInRoom() => _roomCol.OverlapPoint(Player.Instance.Transform.position);
     public void ResetBasicTimer() => BasicAttackTimer = Config.BasicAttackCooldown;
     public void ResetSpecialTimer() => SpecialAttackTimer = Random.Range(Config.SpecialAttackCooldownMin, Config.SpecialAttackCooldownMax);

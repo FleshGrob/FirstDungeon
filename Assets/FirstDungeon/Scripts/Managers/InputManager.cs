@@ -12,6 +12,8 @@ namespace FirstDungeon.Scripts.Managers
         public event Action OnShootKeyPressed;
         public event Action<Vector2> OnMoveKeyChanged;
         public event Action OnPauseKeyPressed;
+        public event Action OnShapeshiftPressed;
+        public event Action OnAbilityPressed;
         
         NewControls _controls;
         int _blockCounter;
@@ -35,31 +37,41 @@ namespace FirstDungeon.Scripts.Managers
 
         void Start()
         {
+            _controls.GamePlay.Move.performed += ChangeMove;
+            _controls.GamePlay.Move.canceled += ChangeMove;
+            
             _controls.GamePlay.Action.performed += PressAction;
             
             _controls.GamePlay.Shoot.performed += PressShoot;
             
-            _controls.GamePlay.Move.performed += ChangeMove;
-            _controls.GamePlay.Move.canceled += ChangeMove;
+            _controls.GamePlay.Shapeshift.performed += PressShapeshift;
+
+            _controls.GamePlay.Ability.performed += PressAbility; 
             
             _controls.UI.Pause.performed += PressPause;
         }
 
         void OnDestroy()
         {
+            _controls.GamePlay.Move.performed -= ChangeMove;
+            _controls.GamePlay.Move.canceled -= ChangeMove;
+
             _controls.GamePlay.Action.performed -= PressAction;
             
             _controls.GamePlay.Shoot.performed -= PressShoot;
             
-            _controls.GamePlay.Move.performed -= ChangeMove;
-            _controls.GamePlay.Move.canceled -= ChangeMove;
+            _controls.GamePlay.Shapeshift.performed -= PressShapeshift;
+            
+            _controls.GamePlay.Ability.performed -= PressAbility; 
             
             _controls.UI.Pause.performed -= PressPause;
         }
         
+        void ChangeMove(InputAction.CallbackContext ctx) => OnMoveKeyChanged?.Invoke(ctx.ReadValue<Vector2>());
         void PressAction(InputAction.CallbackContext ctx) => OnActionKeyPressed?.Invoke();
         void PressShoot(InputAction.CallbackContext ctx) => OnShootKeyPressed?.Invoke();
-        void ChangeMove(InputAction.CallbackContext ctx) => OnMoveKeyChanged?.Invoke(ctx.ReadValue<Vector2>());
+        void PressShapeshift(InputAction.CallbackContext ctx) => OnShapeshiftPressed?.Invoke();
+        void PressAbility(InputAction.CallbackContext ctx) => OnAbilityPressed?.Invoke();
         void PressPause(InputAction.CallbackContext ctx) =>  OnPauseKeyPressed?.Invoke();
 
         public void BlockGameplay()

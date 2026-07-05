@@ -21,6 +21,8 @@ public class Mage : Enemy
     
     protected override void Update()
     {
+        if (_isStunned) return;
+        
         base.Update();
         
         if (ShouldEscape())

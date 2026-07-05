@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "New Controls",
     "maps": [
         {
@@ -27,7 +28,25 @@
                     "name": "Action",
                     "type": "Button",
                     "id": "f835c6ef-ec7d-418f-b9a7-658aec2aa371",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shapeshift",
+                    "type": "Button",
+                    "id": "49b4155a-08fa-404d-8acd-0c4d6a33b336",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Ability",
+                    "type": "Button",
+                    "id": "5d2f2c7b-992e-4fca-b11e-82dece9039be",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -108,6 +127,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "25a2cc6a-583c-48a6-b64c-dbcc2488492b",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shapeshift",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90088d9f-155f-4bca-8d77-a5991d10596d",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ability",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
