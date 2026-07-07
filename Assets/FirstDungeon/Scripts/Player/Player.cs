@@ -12,6 +12,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public PlayerInventory Inventory { get; private set; }
         public PlayerShooter Shooter { get; private set; }
         public PlayerState State { get; private set; }
+        public PlayerVisual Visual { get; private set; }
+        public FrogShapeshift FrogShape { get; private set; }
 
 
         void Awake()
@@ -29,6 +31,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Inventory = GetComponent<PlayerInventory>();
             Shooter = GetComponent<PlayerShooter>();
             State = GetComponent<PlayerState>();
+            Visual = GetComponent<PlayerVisual>();
+            FrogShape = GetComponent<FrogShapeshift>();
         }
     }
 }

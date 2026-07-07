@@ -83,7 +83,6 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public void BackToSafe()
         {
             Rb.position = SafePosition;
-            Debug.Log($"{Rb.position} -> {SafePosition}");
         }
 
         public void SetPlatform(MovingPlatform platform)

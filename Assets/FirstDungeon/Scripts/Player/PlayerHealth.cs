@@ -21,6 +21,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             if (damage.DamageType == Damage.Type.Trap)
             {
                 Player.Instance.Movement.BackToSafe();
+                Player.Instance.FrogShape.StopHooking();
             }
             
             _health -= damage.Amount;

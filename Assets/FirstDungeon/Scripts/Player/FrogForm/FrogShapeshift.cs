@@ -20,8 +20,10 @@ public class FrogShapeshift : MonoBehaviour
     [SerializeField] float _hookingTime;
     [SerializeField] float _hookRange;
     [SerializeField] LayerMask _includedLayers;
-    [SerializeField] float _speed;
-    [SerializeField] float _offset;
+    [SerializeField] float _flyingSpeed;
+    [SerializeField] float _pullingSpeed;
+    [SerializeField] float _flyingOffset;
+    [SerializeField] float _pullingOffset;
     
     bool _isFrog;
     bool _canHook;
@@ -32,6 +34,8 @@ public class FrogShapeshift : MonoBehaviour
     SpriteRenderer _tongueSr;
     Sprite _originalSprite;
     HookingState _currentState;
+    Coroutine _hookingRoutine;
+    IPullable _pullable;
 
     void Awake()
     {
@@ -46,12 +50,17 @@ public class FrogShapeshift : MonoBehaviour
     {
         InputManager.Instance.OnShapeshiftPressed += Shapeshift;
         InputManager.Instance.OnAbilityPressed += HookShot;
+        Player.Instance.State.OnStunned += StopHooking;
     }
 
     void OnDestroy()
     {
-        InputManager.Instance.OnShapeshiftPressed -= Shapeshift;
-        InputManager.Instance.OnAbilityPressed -= HookShot;
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.OnShapeshiftPressed -= Shapeshift;
+            InputManager.Instance.OnAbilityPressed -= HookShot;
+            Player.Instance.State.OnStunned -= StopHooking;
+        }
     }
 
     void Shapeshift()
@@ -76,7 +85,7 @@ public class FrogShapeshift : MonoBehaviour
 
     void HookShot()
     {
-        if (_canHook) StartCoroutine(HookingRoutine());
+        if (_canHook) _hookingRoutine = StartCoroutine(HookingRoutine());
     }
     
     IEnumerator HookingRoutine()
@@ -86,64 +95,116 @@ public class FrogShapeshift : MonoBehaviour
         
         float progress = 0;
         float length = 0;
+        float distance = _hookRange;
         
         RaycastHit2D hookHit = default;
-        IPullable pullable = null;
         HookAnchor hookAnchor = null;
-        
-        float distance = Vector2.Distance(_rb.position, hookHit.point);
+        Vector2 previousPosition = Vector2.zero;
+        float previousDistance = 0;
         
         while (_currentState == HookingState.Hooking && length < _hookRange)
         {
-            progress += Time.deltaTime / _hookingTime;
+            progress += Time.fixedDeltaTime /_hookingTime;
             progress = Mathf.Clamp01(progress);
             length = progress * _hookRange;
             
             _tongueSr.size = new Vector2(_tongueSr.size.x, length);
             
             hookHit = Physics2D.Raycast(transform.position, Player.Instance.Movement.Facing, length, _includedLayers);
-            Collider2D hookHitCol = hookHit.collider;
             
             if (hookHit.collider != null)
             {
-                pullable = hookHit.collider.GetComponent<IPullable>();
+                _pullable = hookHit.collider.GetComponent<IPullable>();
                 hookAnchor = hookHit.collider.GetComponent<HookAnchor>();
             }
             
             if (hookAnchor != null) _currentState = HookingState.Flying;
-            if (pullable != null) _currentState = HookingState.Pulling;
+            if (_pullable != null)
+            {
+                _currentState = HookingState.Pulling;
+                _pullable.Pull(_rb.position, _pullingSpeed, _pullingOffset);
+            }
             
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
-        while (_currentState == HookingState.Flying && distance > _offset)
+        Player.Instance.State.GetInAir(true);
+        
+        while (_currentState == HookingState.Flying && distance > _flyingOffset)
         {
-            distance = Vector2.Distance(_rb.position, hookHit.point);
-            
             Vector2 target = hookHit.point;
             
-            Vector2 newPosition = Vector2.MoveTowards(_rb.position, target, _speed * Time.deltaTime);
+            distance = Vector2.Distance(_rb.position, target);
+            
+            if (distance == previousDistance)
+            {
+                StopHooking();
+                yield break;
+            }
+            
+            Vector2 newPosition = Vector2.MoveTowards(_rb.position, target, _flyingSpeed * Time.fixedDeltaTime);
         
             _rb.MovePosition(newPosition);
             
             _tongueSr.size = new Vector2(_tongueSr.size.x, distance);
             
-            yield return null;
+            previousDistance = distance;
+            
+            yield return new WaitForFixedUpdate();
         }
+        
+        Player.Instance.State.GetInAir(false);
 
+        while (_currentState == HookingState.Pulling && distance > _pullingOffset)
+        {
+            Vector2 target = _pullable.PullTransform.position;
+            
+            distance = Vector2.Distance(_rb.position, target);
+            
+            if (distance == previousDistance)
+            {
+                StopHooking();
+                yield break;
+            }
+            
+            _tongueSr.size = new Vector2(_tongueSr.size.x, distance);
+            
+            previousDistance = distance;
+            
+            yield return new WaitForFixedUpdate();
+        }
+        
         while (_currentState == HookingState.Hooking && length > 0)
         {
-            progress -= Time.deltaTime / _hookingTime;
+            progress -= Time.fixedDeltaTime / _hookingTime;
             progress = Mathf.Clamp01(progress);
             length = progress * _hookRange;
             
             _tongueSr.size = new Vector2(_tongueSr.size.x, length);
             
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
         
-        _tongueSr.size = new Vector2(_tongueSr.size.x, 0);
         InputManager.Instance.UnBlockGameplay();
+
+        _tongueSr.size = new Vector2(_tongueSr.size.x, 0);
+        _currentState = HookingState.Idle;
+        _pullable  = null;
+        _hookingRoutine  = null;
+    }
+
+    public void StopHooking()
+    {
+        if (_currentState == HookingState.Idle) return;
+        
+        StopCoroutine(_hookingRoutine);
+        InputManager.Instance.UnBlockGameplay();
+        Player.Instance.State.GetInAir(false);
+        if (_pullable != null) _pullable.CancelPulling();
+        
+        _pullable = null;
+        _hookingRoutine  = null;
+        _tongueSr.size = new Vector2(_tongueSr.size.x, 0);
         _currentState = HookingState.Idle;
     }
 }
