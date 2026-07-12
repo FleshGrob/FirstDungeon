@@ -12,16 +12,23 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public int TakeDamage(Damage damage)
         {
             if (Player.Instance.State.IsInvulnerable) return 0;
-            if (damage.DamageType == Damage.Type.GroundHazard)
+
+            switch (damage.DamageType)
             {
-                if (Player.Instance.State.IsInAir) return 0;
-                Player.Instance.Movement.BackToSafe();
-            }
-            
-            if (damage.DamageType == Damage.Type.Trap)
-            {
-                Player.Instance.Movement.BackToSafe();
-                Player.Instance.FrogShape.StopHooking();
+                case Damage.Type.Bog:
+                    if (Player.Instance.State.IsInAir) return 0;
+                    Player.Instance.Movement.Drown(damage.StunDuration);
+                    break;
+                
+                case Damage.Type.GroundHazard:
+                    if (Player.Instance.State.IsInAir) return 0;
+                    Player.Instance.Movement.BackToSafe();
+                    break;
+                
+                case Damage.Type.Trap:
+                    Player.Instance.Movement.BackToSafe();
+                    Player.Instance.FrogShape.StopHooking();
+                    break;
             }
             
             _health -= damage.Amount;

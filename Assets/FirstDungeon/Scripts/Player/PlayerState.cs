@@ -11,6 +11,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         [SerializeField] float _invulnerableTime;
 
         public Action OnStunned;
+        int _airCount;
         
         public bool IsStunned { get; private set; }
         public bool IsInBog { get; private set; }
@@ -21,7 +22,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         
 
         public void SetInBog(bool value) => IsInBog = value;
-        public void GetInAir(bool value) => IsInAir = value;
+        
         public void SetSafe(bool value) => IsSafe = value;
 
         [ContextMenu("SerializedStun")]
@@ -69,6 +70,14 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
             IsInvulnerable = false;
             Player.Instance.Visual.BackToNormal();
+        }
+        
+        public void GetInAir(bool value)
+        {
+            if (value) _airCount++;
+            else _airCount--;
+            
+            IsInAir = _airCount > 0;
         }
 
         public void Die() => IsAlive = false;

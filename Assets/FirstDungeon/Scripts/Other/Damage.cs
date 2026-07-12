@@ -4,7 +4,8 @@ public struct Damage
     {
         Normal,
         Trap,
-        GroundHazard
+        GroundHazard,
+        Bog
     }
 
     public int Amount;

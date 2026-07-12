@@ -36,6 +36,7 @@ public class FrogShapeshift : MonoBehaviour
     HookingState _currentState;
     Coroutine _hookingRoutine;
     IPullable _pullable;
+    Transform _targetTransform;
 
     void Awake()
     {
@@ -122,6 +123,7 @@ public class FrogShapeshift : MonoBehaviour
             if (_pullable != null)
             {
                 _currentState = HookingState.Pulling;
+                _targetTransform  = _pullable.PullTransform;
                 _pullable.Pull(_rb.position, _pullingSpeed, _pullingOffset);
             }
             
@@ -157,7 +159,13 @@ public class FrogShapeshift : MonoBehaviour
 
         while (_currentState == HookingState.Pulling && distance > _pullingOffset)
         {
-            Vector2 target = _pullable.PullTransform.position;
+            if (_targetTransform == null)
+            {
+                StopHooking(); 
+                yield break;
+            }
+            
+            Vector2 target = _targetTransform.position;
             
             distance = Vector2.Distance(_rb.position, target);
             
@@ -199,8 +207,9 @@ public class FrogShapeshift : MonoBehaviour
         
         StopCoroutine(_hookingRoutine);
         InputManager.Instance.UnBlockGameplay();
-        Player.Instance.State.GetInAir(false);
-        if (_pullable != null) _pullable.CancelPulling();
+        
+        if (_currentState == HookingState.Flying) Player.Instance.State.GetInAir(false);
+        if (_targetTransform != null) _pullable.CancelPulling();
         
         _pullable = null;
         _hookingRoutine  = null;

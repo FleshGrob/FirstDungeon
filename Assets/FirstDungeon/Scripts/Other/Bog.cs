@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace FirstDungeon.Scripts.OtherScripts
     {
         Collider2D _bogCol;
         PlayerMovement _playerMovement;
-        IDamageable _damageable;
+        List<IDamageable> _damageables = new();
         
         readonly int _damage = 1;
         readonly float _drownTime = 1;
@@ -18,42 +19,38 @@ namespace FirstDungeon.Scripts.OtherScripts
             _bogCol = GetComponent<Collider2D>();
         }
 
-        void OnTriggerEnter2D(Collider2D other)
-        {
-            if (_playerMovement != null) return;
-            
-            _playerMovement = other.GetComponent<PlayerMovement>();
-            _damageable = other.GetComponent<IDamageable>();
-        }
-
         void OnTriggerStay2D(Collider2D other)
         {
-            if (_playerMovement == null) return;
-            Player.Instance.State.SetInBog(true);
+            if (_bogCol.OverlapPoint(other.bounds.center))
+            {
+                IDamageable damageable = other.GetComponent<IDamageable>();
+                if (damageable != null && !_damageables.Contains(damageable))
+                {
+                    _damageables.Add(damageable);
+                }
+            }
             
-            if (Player.Instance.State.IsInAir) return;
-            
-            Vector2 playerPos = other.bounds.center;
-            
-            if (!_bogCol.OverlapPoint(playerPos)) return;
-
             Damage damage = new Damage
             {
                 Amount = _damage,
                 StunDuration = _drownTime,
+                DamageType = Damage.Type.Bog
             };
-            _damageable.TakeDamage(damage);
-            _playerMovement.Drown(_drownTime);
+            
+            for (int i = _damageables.Count - 1; i >= 0; i--)
+            {
+                IDamageable damageable = _damageables[i];
+                int takenDamage = damageable.TakeDamage(damage);
+                if (takenDamage > 0) _damageables.Remove(damageable);
+            }
         }
 
         void OnTriggerExit2D(Collider2D other)
         {
-            if (_playerMovement == null) return;
-            if (_playerMovement.gameObject != other.gameObject) return;
+            IDamageable damageable = other.GetComponent<IDamageable>();
             
-            Player.Instance.State.SetInBog(false);
-            _playerMovement = null;
-            _damageable = null;
+            if (damageable == null) return;
+            _damageables.Remove(damageable);
         }
     }
 }

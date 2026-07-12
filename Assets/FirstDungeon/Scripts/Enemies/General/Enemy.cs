@@ -7,22 +7,24 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IPullable
 {
     [SerializeField] LayerMask _obstacle;
     [SerializeField] GameObject _corpsePrefab;
     [SerializeField] LayerMask _projectileLayer;
+    [SerializeField] protected bool _isStunned;
     
-    const float HurtTime = 0.5f;
+    float _hurtTime = 0.5f;
     float _defenseTimer;
     
     protected Rigidbody2D _rb;
     protected Collider2D _col;
     protected SpriteRenderer _sr;
-    protected Collider2D _roomCol;
+    protected Coroutine _pullRoutine;
     EnemyHealth _hp;
     Color _originalColor;
 
+    public Transform PullTransform { get; private set; }
     public float BasicAttackTimer { get; private set; }
     public float SpecialAttackTimer { get; private set; }
     public EnemyStateMachine StateMachine { get; private set; }
@@ -30,15 +32,17 @@ public abstract class Enemy : MonoBehaviour
     public NavMeshAgent Agent { get; private set; }
     public Vector2 Facing { get; private set; } = Vector2.down;
     public GameObject Room { get; private set; }
+    public bool IsInAir { get; private set; }
     public bool IsActing { get; protected set; }
+    public Collider2D RoomCol { get; protected set; }
     public abstract EnemyConfig Config { get; }
     public LayerMask Obstacle => _obstacle;
-
-    [SerializeField] protected bool _isStunned;
-   
+    
     
     void Awake()
     {
+        PullTransform = transform;
+        
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<Collider2D>();
         _sr  = GetComponentInChildren<SpriteRenderer>();
@@ -54,7 +58,7 @@ public abstract class Enemy : MonoBehaviour
     void Start()
     {
         StateMachine.ChangeState(new PatrolState(this));
-        _roomCol = GetComponentInParent<CompositeCollider2D>();
+        RoomCol = GetComponentInParent<CompositeCollider2D>();
 
         _hp.OnHurt += Hurt;
         _hp.OnDeath += Die;
@@ -135,7 +139,7 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator HurtRoutine()
     {
         _sr.color = Color.red;
-        yield return new WaitForSeconds(HurtTime);
+        yield return new WaitForSeconds(_hurtTime);
         _sr.color = _originalColor;
     }
     
@@ -145,13 +149,59 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
     
-    public bool IsPlayerInRoom() => _roomCol.OverlapPoint(Player.Instance.Transform.position);
+    public void Pull(Vector2 frogPosition, float speed, float offset)
+    {
+        _pullRoutine = StartCoroutine(PullingRoutine(frogPosition, speed, offset));
+    }
+
+    IEnumerator PullingRoutine(Vector2 frogPosition, float speed, float offset)
+    {
+        Agent.enabled = false;
+        _isStunned = true;
+        IsInAir = true;
+        _rb.bodyType = RigidbodyType2D.Dynamic;
+            
+        float distance = Vector2.Distance(_rb.position, frogPosition);
+            
+        while (distance > offset)
+        {
+            distance = Vector2.Distance(_rb.position, frogPosition);
+            
+            Vector2 newPosition = Vector2.MoveTowards(_rb.position, frogPosition, speed * Time.fixedDeltaTime);
+        
+            _rb.MovePosition(newPosition);
+            
+            yield return new WaitForFixedUpdate();
+        }
+
+        _rb.linearVelocity = Vector2.zero;
+        _rb.bodyType = RigidbodyType2D.Kinematic;
+        _isStunned = false;
+        IsInAir = false;
+        Agent.enabled = true;
+    }
+
+    public void CancelPulling()
+    {
+        if (_pullRoutine != null)
+        { 
+            StopCoroutine(_pullRoutine);
+            _rb.linearVelocity = Vector2.zero;
+            _rb.bodyType = RigidbodyType2D.Kinematic;
+            _isStunned = false;
+            Agent.enabled = true;
+            _pullRoutine = null;
+        }
+    }
+    
+    public bool IsPlayerInRoom() => RoomCol.OverlapPoint(Player.Instance.Transform.position);
     public void ResetBasicTimer() => BasicAttackTimer = Config.BasicAttackCooldown;
     public void ResetSpecialTimer() => SpecialAttackTimer = Random.Range(Config.SpecialAttackCooldownMin, Config.SpecialAttackCooldownMax);
 
     public abstract void BasicAttack();
     public abstract void SpecialAttack();
     public abstract void Defense();
+    
     
     
     protected virtual void OnDrawGizmosSelected()

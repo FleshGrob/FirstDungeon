@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using FirstDungeon.Scripts.OtherScripts;
-using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
 namespace FirstDungeon.Scripts.ObjectsScripts
@@ -32,6 +30,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         {
             IDamageable damageable = other.GetComponent<IDamageable>();
             if (damageable == null) return;
+            if (_damageables.Contains(damageable)) return;
             
             _damageables.Add(damageable);
             
@@ -50,10 +49,13 @@ namespace FirstDungeon.Scripts.ObjectsScripts
                 DamageType = Damage.Type.GroundHazard,
             };
             
-            foreach (IDamageable damageable in _damageables)
-            { 
-                damageable.TakeDamage(damage);
+            for (int i = _damageables.Count - 1; i >= 0; i--)
+            {
+                IDamageable damageable = _damageables[i];
+                int takenDamage = damageable.TakeDamage(damage);
+                if (takenDamage > 0) _damageables.Remove(damageable);
             }
+            
         }
 
         void OnTriggerExit2D(Collider2D other)

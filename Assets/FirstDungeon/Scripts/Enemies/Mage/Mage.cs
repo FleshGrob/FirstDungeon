@@ -101,11 +101,9 @@ public class Mage : Enemy
             
             if (!NavMesh.SamplePosition(candidate, out NavMeshHit hit, 0.5f, NavMesh.AllAreas)) continue;
             if (Vector2.Distance(hit.position, Player.Instance.Transform.position) <= _config.PlayerProximityRadius) continue;
-            if (!_roomCol.OverlapPoint(hit.position)) continue;
-            {
-                Agent.Warp(hit.position);
-                break;
-            }
+            if (!RoomCol.OverlapPoint(hit.position)) continue;
+            Agent.Warp(hit.position);
+            break;
         }
         _sr.enabled = true;
         _col.enabled = true;
