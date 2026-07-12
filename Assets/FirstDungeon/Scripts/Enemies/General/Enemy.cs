@@ -21,7 +21,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     protected Collider2D _col;
     protected SpriteRenderer _sr;
     protected Coroutine _pullRoutine;
-    EnemyHealth _hp;
+    EnemyHealth _health;
     Color _originalColor;
 
     public Transform PullTransform { get; private set; }
@@ -46,7 +46,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<Collider2D>();
         _sr  = GetComponentInChildren<SpriteRenderer>();
-        _hp = GetComponent<EnemyHealth>();
+        _health = GetComponent<EnemyHealth>();
         Agent = GetComponent<NavMeshAgent>();
         StateMachine = new EnemyStateMachine();
         Agent.updateRotation = false;  
@@ -60,8 +60,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
         StateMachine.ChangeState(new PatrolState(this));
         RoomCol = GetComponentInParent<CompositeCollider2D>();
 
-        _hp.OnHurt += Hurt;
-        _hp.OnDeath += Die;
+        _health.OnHurt += Hurt;
+        _health.OnDeath += Die;
     }
 
     protected virtual void Update()
@@ -96,8 +96,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
 
     void OnDestroy()
     {
-        _hp.OnHurt -= Hurt;
-        _hp.OnDeath -= Die;
+        _health.OnHurt -= Hurt;
+        _health.OnDeath -= Die;
     }
 
     public void Move(Vector2 destination, float speed)

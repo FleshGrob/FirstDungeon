@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 561202247296608926}
   - component: {fileID: 3943010215446667356}
   - component: {fileID: 3177547351448787820}
+  - component: {fileID: 1680621135720064864}
   - component: {fileID: 4185456831301540275}
   - component: {fileID: 3787634671704022195}
   m_Layer: 11
@@ -176,6 +177,22 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!208 &1680621135720064864
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5251225844440043879}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.25, y: 0.35, z: 0.25}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!114 &4185456831301540275
 MonoBehaviour:
   m_ObjectHideFlags: 0

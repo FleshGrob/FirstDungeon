@@ -11,8 +11,7 @@ public class FrogShapeshift : MonoBehaviour
         Idle,
         Hooking,
         Flying,
-        Pulling,
-        Retracting
+        Pulling
     }
     
     [SerializeField] Sprite _frogSprite;
@@ -100,7 +99,6 @@ public class FrogShapeshift : MonoBehaviour
         
         RaycastHit2D hookHit = default;
         HookAnchor hookAnchor = null;
-        Vector2 previousPosition = Vector2.zero;
         float previousDistance = 0;
         
         while (_currentState == HookingState.Hooking && length < _hookRange)
@@ -197,6 +195,7 @@ public class FrogShapeshift : MonoBehaviour
 
         _tongueSr.size = new Vector2(_tongueSr.size.x, 0);
         _currentState = HookingState.Idle;
+        _targetTransform  = null;
         _pullable  = null;
         _hookingRoutine  = null;
     }
@@ -211,6 +210,7 @@ public class FrogShapeshift : MonoBehaviour
         if (_currentState == HookingState.Flying) Player.Instance.State.GetInAir(false);
         if (_targetTransform != null) _pullable.CancelPulling();
         
+        _targetTransform  = null;
         _pullable = null;
         _hookingRoutine  = null;
         _tongueSr.size = new Vector2(_tongueSr.size.x, 0);

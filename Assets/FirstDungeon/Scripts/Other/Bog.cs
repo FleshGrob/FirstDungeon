@@ -7,7 +7,6 @@ namespace FirstDungeon.Scripts.OtherScripts
     public class Bog : MonoBehaviour
     {
         Collider2D _bogCol;
-        PlayerMovement _playerMovement;
         List<IDamageable> _damageables = new();
         
         readonly int _damage = 1;

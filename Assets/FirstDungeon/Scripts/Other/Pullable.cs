@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Pullable : MonoBehaviour, IPullable
 {
-    Rigidbody2D _rb;
     Coroutine _pullRoutine;
-    public Transform PullTransform { get; private set; }
     
+    public Transform PullTransform { get; private set; }
+    public Rigidbody2D Rb { get; private set; }
+    public bool IsInAir { get; private set; }
     
     void Awake()
     {
-        _rb = GetComponent<Rigidbody2D>();
+        Rb = GetComponent<Rigidbody2D>();
         PullTransform = transform;
     }
 
@@ -22,23 +23,25 @@ public class Pullable : MonoBehaviour, IPullable
 
     IEnumerator PullingRoutine(Vector2 frogPosition, float speed, float offset)
     {
-        _rb.bodyType = RigidbodyType2D.Dynamic;
+        Rb.bodyType = RigidbodyType2D.Dynamic;
+        IsInAir  = true;
             
-        float distance = Vector2.Distance(_rb.position, frogPosition);
+        float distance = Vector2.Distance(Rb.position, frogPosition);
             
         while (distance > offset)
         {
-            distance = Vector2.Distance(_rb.position, frogPosition);
+            distance = Vector2.Distance(Rb.position, frogPosition);
             
-            Vector2 newPosition = Vector2.MoveTowards(_rb.position, frogPosition, speed * Time.fixedDeltaTime);
+            Vector2 newPosition = Vector2.MoveTowards(Rb.position, frogPosition, speed * Time.fixedDeltaTime);
         
-            _rb.MovePosition(newPosition);
+            Rb.MovePosition(newPosition);
             
             yield return new WaitForFixedUpdate();
         }
 
-        _rb.linearVelocity = Vector2.zero;
-        _rb.bodyType = RigidbodyType2D.Kinematic;
+        Rb.linearVelocity = Vector2.zero;
+        IsInAir  = false;
+        Rb.bodyType = RigidbodyType2D.Kinematic;
     }
 
     public void CancelPulling()
@@ -46,8 +49,9 @@ public class Pullable : MonoBehaviour, IPullable
         if (_pullRoutine != null)
         { 
             StopCoroutine(_pullRoutine);
-            _rb.linearVelocity = Vector2.zero;
-            _rb.bodyType = RigidbodyType2D.Kinematic;
+            Rb.linearVelocity = Vector2.zero;
+            IsInAir  = false;
+            Rb.bodyType = RigidbodyType2D.Kinematic;
             _pullRoutine = null;
         }
     }
