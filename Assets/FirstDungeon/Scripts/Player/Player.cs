@@ -9,6 +9,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public Transform Transform { get; private set; }
         public PlayerMovement Movement { get; private set; }
         public PlayerHealth Health { get; private set; }
+        public PlayerMana Mana { get; private set; }
         public PlayerInventory Inventory { get; private set; }
         public PlayerShooter Shooter { get; private set; }
         public PlayerState State { get; private set; }
@@ -28,6 +29,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Transform = transform;
             Movement = GetComponent<PlayerMovement>();
             Health = GetComponent<PlayerHealth>();
+            Mana  = GetComponent<PlayerMana>();
             Inventory = GetComponent<PlayerInventory>();
             Shooter = GetComponent<PlayerShooter>();
             State = GetComponent<PlayerState>();

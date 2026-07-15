@@ -16,7 +16,8 @@ namespace FirstDungeon.Scripts.OtherScripts
         public bool IsDark { get; private set; }
         
         public event Action OnDisposed;
-
+        Action _onHit;
+        
 
         void Awake()
         {
@@ -37,7 +38,8 @@ namespace FirstDungeon.Scripts.OtherScripts
                 {
                     Amount = _damage,
                 };
-                damageable.TakeDamage(damage);
+                
+                if (damageable.TakeDamage(damage) > 0) _onHit?.Invoke();
             }
             Destroy(gameObject);  
         }
@@ -47,8 +49,9 @@ namespace FirstDungeon.Scripts.OtherScripts
             OnDisposed?.Invoke();
         }
 
-        public void Launch(Vector2 direction, float speed, int damage)
+        public void Launch(Vector2 direction, float speed, int damage, Action onHit = null)
         {
+            _onHit = onHit;
             _speed = speed;
             _damage = damage;
             Rb.linearVelocity = direction * speed;

@@ -24338,7 +24338,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.1
+  m_VoxelSize: 0.10333333
   m_BuildHeightMesh: 0
   m_MinRegionArea: 0
   m_HideEditorLogs: 0
@@ -43134,6 +43134,7 @@ GameObject:
   - component: {fileID: 1625309257}
   - component: {fileID: 1625309267}
   - component: {fileID: 1625309253}
+  - component: {fileID: 1625309269}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -43213,10 +43214,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2219544f7f16a4aa396ed28ab9d9098b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: 2120509330573256046, guid: 3cc51544bfc774b52ad93bf326224cc9, type: 3}
+  _normalProjectile: {fileID: 2120509330573256046, guid: 3cc51544bfc774b52ad93bf326224cc9, type: 3}
+  _bigProjectile: {fileID: 2120509330573256046, guid: 6bef525560dbc439fb050f769b22d025, type: 3}
+  _normalBlank: {fileID: 1739631873036302855, guid: b56e957443df94bdd934e660797714fc, type: 3}
+  _bigBlank: {fileID: 1739631873036302855, guid: 6704b9e5a8fbd4114ace28860c487fc8, type: 3}
+  _normalDamage: 2
   _projectileSpeed: 7
-  _projectileDamage: 2
   _canShoot: 1
+  _chargeTime: 1
+  _normalManaCost: 1
+  _chargedManaCost: 2
 --- !u!114 &1625309258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43466,6 +43473,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1625309269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625309252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319f42ff8dc844e5ea578f069bc52f9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMana
+  _maxMana: 12
 --- !u!1001 &1649062537
 PrefabInstance:
   m_ObjectHideFlags: 0

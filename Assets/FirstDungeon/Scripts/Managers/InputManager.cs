@@ -10,6 +10,7 @@ namespace FirstDungeon.Scripts.Managers
 
         public event Action OnActionKeyPressed;
         public event Action OnShootKeyPressed;
+        public event Action OnShootKeyCanceled;
         public event Action<Vector2> OnMoveKeyChanged;
         public event Action OnPauseKeyPressed;
         public event Action OnShapeshiftPressed;
@@ -42,7 +43,8 @@ namespace FirstDungeon.Scripts.Managers
             
             _controls.GamePlay.Action.performed += PressAction;
             
-            _controls.GamePlay.Shoot.performed += PressShoot;
+            _controls.GamePlay.Shoot.started += PressShoot;
+            _controls.GamePlay.Shoot.canceled += CancelShoot;
             
             _controls.GamePlay.Shapeshift.performed += PressShapeshift;
 
@@ -58,7 +60,8 @@ namespace FirstDungeon.Scripts.Managers
 
             _controls.GamePlay.Action.performed -= PressAction;
             
-            _controls.GamePlay.Shoot.performed -= PressShoot;
+            _controls.GamePlay.Shoot.started -= PressShoot;
+            _controls.GamePlay.Shoot.canceled -= CancelShoot;
             
             _controls.GamePlay.Shapeshift.performed -= PressShapeshift;
             
@@ -70,6 +73,7 @@ namespace FirstDungeon.Scripts.Managers
         void ChangeMove(InputAction.CallbackContext ctx) => OnMoveKeyChanged?.Invoke(ctx.ReadValue<Vector2>());
         void PressAction(InputAction.CallbackContext ctx) => OnActionKeyPressed?.Invoke();
         void PressShoot(InputAction.CallbackContext ctx) => OnShootKeyPressed?.Invoke();
+        void CancelShoot(InputAction.CallbackContext ctx) => OnShootKeyCanceled?.Invoke();
         void PressShapeshift(InputAction.CallbackContext ctx) => OnShapeshiftPressed?.Invoke();
         void PressAbility(InputAction.CallbackContext ctx) => OnAbilityPressed?.Invoke();
         void PressPause(InputAction.CallbackContext ctx) =>  OnPauseKeyPressed?.Invoke();
