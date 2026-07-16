@@ -3,46 +3,45 @@ using UnityEngine;
 
 public class PlayerMana : MonoBehaviour
 {
-    [SerializeField] int _maxMana;
-
-    int _currentMana;
+    public int MaxMana { get; private set; } = 12;
+    public int CurrentMana { get; private set; } = 12;
     
     public event Action OnManaChanged;
 
 
     void Awake()
     {
-        _currentMana = _maxMana;
-        Debug.Log($"PlayerMana: {_currentMana} / {_maxMana}");
+        CurrentMana = MaxMana;
+        Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
     public bool Has(int amount)
     {
-        return amount <= _currentMana;
+        return amount <= CurrentMana;
     }
 
     public void Spend(int amount)
     {
         if (!Has(amount)) return;
         
-        _currentMana -= amount;
+        CurrentMana -= amount;
         OnManaChanged?.Invoke();
         
-        Debug.Log($"PlayerMana: {_currentMana} / {_maxMana}");
+        Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
     public void Restore(int amount)
     {
-        _currentMana += amount;
-        if (_currentMana > _maxMana) _currentMana = _maxMana;
+        CurrentMana += amount;
+        if (CurrentMana > MaxMana) CurrentMana = MaxMana;
         
         OnManaChanged?.Invoke();
-        Debug.Log($"PlayerMana: {_currentMana} / {_maxMana}");
+        Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
     public void RestoreFull()
     {
-        _currentMana = _maxMana;
+        CurrentMana = MaxMana;
         OnManaChanged?.Invoke();
     }
 }

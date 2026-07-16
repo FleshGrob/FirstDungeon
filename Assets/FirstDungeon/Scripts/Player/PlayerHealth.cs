@@ -1,3 +1,4 @@
+using System;
 using FirstDungeon.Scripts.OtherScripts;
 using UnityEngine;
 
@@ -5,9 +6,10 @@ namespace FirstDungeon.Scripts.PlayerScripts
 {
     public class PlayerHealth : MonoBehaviour, IDamageable
     {
-        int _health = 6;
-        int _maxHealth = 6;
-    
+        public int MaxHealth { get; private set; } = 6;
+        public int CurrentHealth { get; private set; } = 6;
+        
+        public event Action OnHealthChanged;
 
         public int TakeDamage(Damage damage)
         {
@@ -31,28 +33,31 @@ namespace FirstDungeon.Scripts.PlayerScripts
                     break;
             }
             
-            _health -= damage.Amount;
+            CurrentHealth -= damage.Amount;
             if (damage.StunDuration > 0) 
                 Player.Instance.State.Stun(damage.StunDuration);
 
             Player.Instance.State.SetInvulnerable();
             
-            Debug.Log(_health);
+            OnHealthChanged?.Invoke();
+            Debug.Log($"PlayerHealth: {CurrentHealth} / {MaxHealth}");
             return damage.Amount;
         }
 
         public void Heal(int hp)
         {
-            if (_health == _maxHealth)
+            if (CurrentHealth == MaxHealth)
                 return;
-            _health += hp;
-            if (_health > _maxHealth)
-                _health = _maxHealth;
+            CurrentHealth += hp;
+            if (CurrentHealth > MaxHealth)
+                CurrentHealth = MaxHealth;
+            
+            OnHealthChanged?.Invoke();
         }
 
         public void UpgradeHealth(int hpUpgrade)
         {
-            _maxHealth += hpUpgrade;
+            MaxHealth += hpUpgrade;
         }
     }
 }
