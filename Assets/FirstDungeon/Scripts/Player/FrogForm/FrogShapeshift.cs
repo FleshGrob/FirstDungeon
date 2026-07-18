@@ -15,6 +15,7 @@ public class FrogShapeshift : MonoBehaviour
     }
     
     [SerializeField] Sprite _frogSprite;
+    
     [SerializeField] GameObject _frogTongue;
     [SerializeField] float _hookingTime;
     [SerializeField] float _hookRange;
@@ -24,19 +25,36 @@ public class FrogShapeshift : MonoBehaviour
     [SerializeField] float _flyingOffset;
     [SerializeField] float _pullingOffset;
     
+    [SerializeField] GameObject _firstPunchPrefab;
+    [SerializeField] GameObject _secondPunchPrefab;
+    [SerializeField] float _spawnOffset;
+    [SerializeField] float _verticalOffset;
+    [SerializeField] float _punchCooldown;
+    [SerializeField] float _punchSeriesCooldown;
+    [SerializeField] float _seriesActivityTime;
+    
     bool _isFrog;
     bool _canHook;
+    
+    float _punchTimer;
+    float _seriesActivityTimer;
     
     Rigidbody2D _rb;
     CapsuleCollider2D _col;
     SpriteRenderer _sR;
     SpriteRenderer _tongueSr;
     Sprite _originalSprite;
+    
     HookingState _currentState;
     Coroutine _hookingRoutine;
     IPullable _pullable;
     Transform _targetTransform;
+    GameObject _punch;
 
+    Vector2 Direction => Player.Instance.Movement.Facing;
+    Vector2 PunchSpawnPosition => Player.Instance.Movement.Rb.position + new Vector2(0, -_verticalOffset) + Direction * _spawnOffset;
+    
+    
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -48,15 +66,25 @@ public class FrogShapeshift : MonoBehaviour
 
     void Start()
     {
+        InputManager.Instance.OnShootKeyPressed += Attack;
         InputManager.Instance.OnShapeshiftPressed += Shapeshift;
         InputManager.Instance.OnAbilityPressed += HookShot;
         Player.Instance.State.OnStunned += StopHooking;
+    }
+
+    void FixedUpdate()
+    {
+        _punchTimer -= Time.fixedDeltaTime;
+        _seriesActivityTimer -= Time.fixedDeltaTime;
+        
+        if (_punch != null) _punch.transform.position = PunchSpawnPosition;
     }
 
     void OnDestroy()
     {
         if (InputManager.Instance != null)
         {
+            InputManager.Instance.OnShootKeyPressed -= Attack;
             InputManager.Instance.OnShapeshiftPressed -= Shapeshift;
             InputManager.Instance.OnAbilityPressed -= HookShot;
             Player.Instance.State.OnStunned -= StopHooking;
@@ -81,6 +109,23 @@ public class FrogShapeshift : MonoBehaviour
         _isFrog = false;
         _canHook = false;
         _sR.sprite = _originalSprite;
+    }
+
+    void Attack()
+    {
+        if (_punchTimer > 0) return;
+        if (_seriesActivityTimer > 0)
+        {
+            _punch = Instantiate(_secondPunchPrefab, PunchSpawnPosition, Quaternion.FromToRotation(Vector2.up, Direction));
+            _punchTimer = _punchSeriesCooldown;
+            _seriesActivityTimer = 0;
+            return;
+        }
+        
+        _punch = Instantiate(_firstPunchPrefab, PunchSpawnPosition, Quaternion.FromToRotation(Vector2.up, Direction));
+        _punchTimer = _punchCooldown;
+        _seriesActivityTimer = _seriesActivityTime;
+        
     }
 
     void HookShot()

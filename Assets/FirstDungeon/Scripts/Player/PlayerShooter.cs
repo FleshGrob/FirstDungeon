@@ -121,12 +121,16 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         void CancelCharge()
         {
-            if (PauseManager.Instance.IsPaused) return;
-            
             if (_chargingRoutine != null) StopCoroutine(_chargingRoutine);
             _chargingRoutine = null;
             Destroy(_blank);
             _blank  = null;
+            
+            if (PauseManager.Instance.IsPaused)
+            {
+                _state = ShootingState.Idle;
+                return;
+            }
 
             switch (_state)
             {
