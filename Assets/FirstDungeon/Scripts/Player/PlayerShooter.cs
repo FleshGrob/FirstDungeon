@@ -15,16 +15,19 @@ namespace FirstDungeon.Scripts.PlayerScripts
             Charged
         }
         
+        [SerializeField] bool _canShoot;
+        
+        [Header("Prefab")]
         [SerializeField] Projectile _normalProjectile;
         [SerializeField] Projectile _bigProjectile;
         [SerializeField] GameObject _normalBlank;
         [SerializeField] GameObject _bigBlank;
         
+        [Header("Stats")]
         [SerializeField] int _normalDamage;
         [SerializeField] float _projectileSpeed;
-        [SerializeField] bool _canShoot;
+        
         [SerializeField] float _chargeTime;
-
         [SerializeField] int _normalManaCost;
         [SerializeField] int _chargedManaCost;
         
@@ -72,6 +75,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         void ShootNormal()
         {
             _playerMana.Spend(_normalManaCost);
+            
             Projectile projectile = Instantiate(_normalProjectile, SpawnPosition, Quaternion.identity);
             projectile.Launch(Direction, _projectileSpeed, _normalDamage);
         }
@@ -79,15 +83,16 @@ namespace FirstDungeon.Scripts.PlayerScripts
         void ShootCharged()
         {
             _playerMana.Spend(_chargedManaCost);
+            
             Projectile projectile = Instantiate(_bigProjectile, SpawnPosition, Quaternion.identity);
             projectile.Launch(Direction, _projectileSpeed, _normalDamage * 3, () => Player.Instance.Mana.Restore(_chargedManaCost));
         }
 
         void Charge()
         {
-            if (!_canShoot)
-                return;
-
+            if (!_canShoot) return;
+            if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Shoot)) return;
+            
             switch (_playerMana.Has(_chargedManaCost))
             {
                 case true:
@@ -102,6 +107,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         IEnumerator ChargingRoutine()
         {
             _state = ShootingState.Charging;
+            Player.Instance.State.SetActing(true);
             _blank = Instantiate(_normalBlank, SpawnPosition, Quaternion.identity);
             
             float t = 0;
@@ -121,10 +127,15 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         void CancelCharge()
         {
-            if (_chargingRoutine != null) StopCoroutine(_chargingRoutine);
-            _chargingRoutine = null;
-            Destroy(_blank);
-            _blank  = null;
+            if (_chargingRoutine != null)
+            {
+                StopCoroutine(_chargingRoutine);
+                _chargingRoutine = null;
+                Destroy(_blank);
+                _blank = null;
+
+                Player.Instance.State.SetActing(false);
+            }
             
             if (PauseManager.Instance.IsPaused)
             {

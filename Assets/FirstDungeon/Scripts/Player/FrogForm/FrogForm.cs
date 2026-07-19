@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using FirstDungeon.Scripts.Managers;
 using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
-public class FrogShapeshift : MonoBehaviour
+public class FrogForm : MonoBehaviour
 {
     enum HookingState
     {
@@ -16,15 +15,17 @@ public class FrogShapeshift : MonoBehaviour
     
     [SerializeField] Sprite _frogSprite;
     
+    [Header("Hook")]
     [SerializeField] GameObject _frogTongue;
+    [SerializeField] LayerMask _includedLayers;
     [SerializeField] float _hookingTime;
     [SerializeField] float _hookRange;
-    [SerializeField] LayerMask _includedLayers;
     [SerializeField] float _flyingSpeed;
     [SerializeField] float _pullingSpeed;
     [SerializeField] float _flyingOffset;
     [SerializeField] float _pullingOffset;
     
+    [Header("Punches")]
     [SerializeField] GameObject _firstPunchPrefab;
     [SerializeField] GameObject _secondPunchPrefab;
     [SerializeField] float _spawnOffset;
@@ -32,9 +33,6 @@ public class FrogShapeshift : MonoBehaviour
     [SerializeField] float _punchCooldown;
     [SerializeField] float _punchSeriesCooldown;
     [SerializeField] float _seriesActivityTime;
-    
-    bool _isFrog;
-    bool _canHook;
     
     float _punchTimer;
     float _seriesActivityTimer;
@@ -50,7 +48,7 @@ public class FrogShapeshift : MonoBehaviour
     IPullable _pullable;
     Transform _targetTransform;
     GameObject _punch;
-
+    
     Vector2 Direction => Player.Instance.Movement.Facing;
     Vector2 PunchSpawnPosition => Player.Instance.Movement.Rb.position + new Vector2(0, -_verticalOffset) + Direction * _spawnOffset;
     
@@ -93,26 +91,21 @@ public class FrogShapeshift : MonoBehaviour
 
     void Shapeshift()
     {
-        if (!_isFrog) TurnIntoFrog();
-        else TurnIntoHuman();
+        if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Shapeshift)) return;
+        
+        Player.Instance.State.ChangeForm();
+        ChangeSprite();
     }
 
-    void TurnIntoFrog()
+    void ChangeSprite()
     {
-        _isFrog = true;
-        _canHook = true;
-        _sR.sprite = _frogSprite;
-    }
-
-    void TurnIntoHuman()
-    {
-        _isFrog = false;
-        _canHook = false;
-        _sR.sprite = _originalSprite;
+        _sR.sprite = _sR.sprite == _originalSprite  ? _frogSprite : _originalSprite;
     }
 
     void Attack()
     {
+        if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Attack)) return;
+        
         if (_punchTimer > 0) return;
         if (_seriesActivityTimer > 0)
         {
@@ -130,7 +123,7 @@ public class FrogShapeshift : MonoBehaviour
 
     void HookShot()
     {
-        if (_canHook) _hookingRoutine = StartCoroutine(HookingRoutine());
+        if (Player.Instance.State.CanDo(PlayerState.PlayerAction.HookShot)) _hookingRoutine = StartCoroutine(HookingRoutine());
     }
     
     IEnumerator HookingRoutine()

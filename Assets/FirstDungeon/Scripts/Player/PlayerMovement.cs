@@ -42,6 +42,8 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         void FixedUpdate()
         {
+            if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Move)) return;
+            
             Vector2 playerVelocity = _speed * _movementInput.normalized;
             
             if (Platform == null)

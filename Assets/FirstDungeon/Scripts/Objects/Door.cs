@@ -13,7 +13,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         
         void Start()
         {
-            InputManager.Instance.OnActionKeyPressed += TryOpen;
+            InputManager.Instance.OnInteractKeyPressed += TryOpen;
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -32,11 +32,13 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void OnDestroy()
         {
             if (InputManager.Instance == null) return;
-            InputManager.Instance.OnActionKeyPressed -= TryOpen;
+            InputManager.Instance.OnInteractKeyPressed -= TryOpen;
         }
 
         void TryOpen()
         {
+            if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Interact)) return;
+            
             if (_isOpen) return;
             if (_playerInventory == null) return;
             if (!_playerInventory.UseKey())  return;

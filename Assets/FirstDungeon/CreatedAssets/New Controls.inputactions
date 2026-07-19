@@ -19,13 +19,13 @@
                     "name": "Shoot",
                     "type": "Button",
                     "id": "5db1d6d4-0931-44e8-9e1b-e75a8665f67d",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Action",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "f835c6ef-ec7d-418f-b9a7-658aec2aa371",
                     "expectedControlType": "",
@@ -126,7 +126,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Action",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

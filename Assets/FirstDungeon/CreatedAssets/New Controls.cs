@@ -105,13 +105,13 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                     ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""5db1d6d4-0931-44e8-9e1b-e75a8665f67d"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Action"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""f835c6ef-ec7d-418f-b9a7-658aec2aa371"",
                     ""expectedControlType"": """",
@@ -212,7 +212,7 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Action"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -275,7 +275,7 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
         m_GamePlay = asset.FindActionMap("GamePlay", throwIfNotFound: true);
         m_GamePlay_Move = m_GamePlay.FindAction("Move", throwIfNotFound: true);
         m_GamePlay_Shoot = m_GamePlay.FindAction("Shoot", throwIfNotFound: true);
-        m_GamePlay_Action = m_GamePlay.FindAction("Action", throwIfNotFound: true);
+        m_GamePlay_Interact = m_GamePlay.FindAction("Interact", throwIfNotFound: true);
         m_GamePlay_Shapeshift = m_GamePlay.FindAction("Shapeshift", throwIfNotFound: true);
         m_GamePlay_Ability = m_GamePlay.FindAction("Ability", throwIfNotFound: true);
         // UI
@@ -364,7 +364,7 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
     private List<IGamePlayActions> m_GamePlayActionsCallbackInterfaces = new List<IGamePlayActions>();
     private readonly InputAction m_GamePlay_Move;
     private readonly InputAction m_GamePlay_Shoot;
-    private readonly InputAction m_GamePlay_Action;
+    private readonly InputAction m_GamePlay_Interact;
     private readonly InputAction m_GamePlay_Shapeshift;
     private readonly InputAction m_GamePlay_Ability;
     /// <summary>
@@ -387,9 +387,9 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Shoot => m_Wrapper.m_GamePlay_Shoot;
         /// <summary>
-        /// Provides access to the underlying input action "GamePlay/Action".
+        /// Provides access to the underlying input action "GamePlay/Interact".
         /// </summary>
-        public InputAction @Action => m_Wrapper.m_GamePlay_Action;
+        public InputAction @Interact => m_Wrapper.m_GamePlay_Interact;
         /// <summary>
         /// Provides access to the underlying input action "GamePlay/Shapeshift".
         /// </summary>
@@ -430,9 +430,9 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
-            @Action.started += instance.OnAction;
-            @Action.performed += instance.OnAction;
-            @Action.canceled += instance.OnAction;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
             @Shapeshift.started += instance.OnShapeshift;
             @Shapeshift.performed += instance.OnShapeshift;
             @Shapeshift.canceled += instance.OnShapeshift;
@@ -456,9 +456,9 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
-            @Action.started -= instance.OnAction;
-            @Action.performed -= instance.OnAction;
-            @Action.canceled -= instance.OnAction;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
             @Shapeshift.started -= instance.OnShapeshift;
             @Shapeshift.performed -= instance.OnShapeshift;
             @Shapeshift.canceled -= instance.OnShapeshift;
@@ -616,12 +616,12 @@ public partial class @NewControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShoot(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Action" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAction(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Shapeshift" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

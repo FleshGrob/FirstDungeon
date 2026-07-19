@@ -12,7 +12,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void Start()
         {
-            InputManager.Instance.OnActionKeyPressed += Open;
+            InputManager.Instance.OnInteractKeyPressed += Open;
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -32,18 +32,20 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void OnDestroy()
         {
             if (InputManager.Instance == null) return;
-            InputManager.Instance.OnActionKeyPressed -= Open;
+            InputManager.Instance.OnInteractKeyPressed -= Open;
         }
 
         void Open()
         {
+            if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Interact)) return;
+            
             if (_isOpen) return;
             if (_playerShooter == null) return;
 
             _isOpen = true;
             _playerShooter.UnlockFrogStaff();
 
-            InputManager.Instance.OnActionKeyPressed -= Open;
+            InputManager.Instance.OnInteractKeyPressed -= Open;
             Destroy(gameObject);
         }
     }

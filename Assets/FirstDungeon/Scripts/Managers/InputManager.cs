@@ -8,7 +8,7 @@ namespace FirstDungeon.Scripts.Managers
     {
         public static InputManager Instance { get; private set; }
 
-        public event Action OnActionKeyPressed;
+        public event Action OnInteractKeyPressed;
         public event Action OnShootKeyPressed;
         public event Action OnShootKeyCanceled;
         public event Action<Vector2> OnMoveKeyChanged;
@@ -41,7 +41,7 @@ namespace FirstDungeon.Scripts.Managers
             _controls.GamePlay.Move.performed += ChangeMove;
             _controls.GamePlay.Move.canceled += ChangeMove;
             
-            _controls.GamePlay.Action.performed += PressAction;
+            _controls.GamePlay.Interact.performed += PressAction;
             
             _controls.GamePlay.Shoot.started += PressShoot;
             _controls.GamePlay.Shoot.canceled += CancelShoot;
@@ -58,7 +58,7 @@ namespace FirstDungeon.Scripts.Managers
             _controls.GamePlay.Move.performed -= ChangeMove;
             _controls.GamePlay.Move.canceled -= ChangeMove;
 
-            _controls.GamePlay.Action.performed -= PressAction;
+            _controls.GamePlay.Interact.performed -= PressAction;
             
             _controls.GamePlay.Shoot.started -= PressShoot;
             _controls.GamePlay.Shoot.canceled -= CancelShoot;
@@ -71,7 +71,7 @@ namespace FirstDungeon.Scripts.Managers
         }
         
         void ChangeMove(InputAction.CallbackContext ctx) => OnMoveKeyChanged?.Invoke(ctx.ReadValue<Vector2>());
-        void PressAction(InputAction.CallbackContext ctx) => OnActionKeyPressed?.Invoke();
+        void PressAction(InputAction.CallbackContext ctx) => OnInteractKeyPressed?.Invoke();
         void PressShoot(InputAction.CallbackContext ctx) => OnShootKeyPressed?.Invoke();
         void CancelShoot(InputAction.CallbackContext ctx) => OnShootKeyCanceled?.Invoke();
         void PressShapeshift(InputAction.CallbackContext ctx) => OnShapeshiftPressed?.Invoke();

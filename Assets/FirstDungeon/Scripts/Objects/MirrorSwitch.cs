@@ -12,7 +12,7 @@ namespace FirstDungeon.Scripts.ObjectsScripts
 
         void Start()
         {
-            InputManager.Instance.OnActionKeyPressed += Rotate;
+            InputManager.Instance.OnInteractKeyPressed += Rotate;
         }
 
         void OnTriggerEnter2D(Collider2D other)
@@ -30,13 +30,14 @@ namespace FirstDungeon.Scripts.ObjectsScripts
         void OnDestroy()
         {
             if (InputManager.Instance != null) 
-                InputManager.Instance.OnActionKeyPressed -= Rotate;
+                InputManager.Instance.OnInteractKeyPressed -= Rotate;
         }
 
         void Rotate()
         {
-            if (_isPlayerInRange)
-                _mirror.transform.Rotate(0, 0, 45);
+            if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Interact)) return;
+            
+            if (_isPlayerInRange) _mirror.transform.Rotate(0, 0, 45);
         }
     }
 }
