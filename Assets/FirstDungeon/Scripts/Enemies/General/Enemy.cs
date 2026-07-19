@@ -11,6 +11,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
 {
     [SerializeField] LayerMask _obstacle;
     [SerializeField] GameObject _corpsePrefab;
+    [SerializeField] GameObject _energyDropPrefab;
     [SerializeField] LayerMask _projectileLayer;
     [SerializeField] protected bool _isStunned;
     
@@ -146,6 +147,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     void Die()
     {
         Instantiate(_corpsePrefab, transform.position, _corpsePrefab.transform.rotation);
+        Instantiate(_energyDropPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
     

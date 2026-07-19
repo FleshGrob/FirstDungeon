@@ -58,6 +58,12 @@ namespace FirstDungeon.Scripts.PlayerScripts
             OnHealthChanged?.Invoke();
         }
 
+        public void HealFull()
+        {
+            CurrentHealth = MaxHealth;
+            OnHealthChanged?.Invoke();
+        }
+
         public void UpgradeHealth(int hpUpgrade)
         {
             MaxHealth += hpUpgrade;

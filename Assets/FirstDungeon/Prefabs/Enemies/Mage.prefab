@@ -197,6 +197,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   _corpsePrefab: {fileID: 7916618716441528893, guid: 6634b130323394f0a9239feb031c41a9, type: 3}
+  _energyDropPrefab: {fileID: 892001916977436885, guid: d1b842ab646994e7aa49d6d0e1d59587, type: 3}
   _projectileLayer:
     serializedVersion: 2
     m_Bits: 384

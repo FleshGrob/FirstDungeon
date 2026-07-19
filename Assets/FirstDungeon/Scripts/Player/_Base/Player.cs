@@ -15,6 +15,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public PlayerState State { get; private set; }
         public PlayerVisual Visual { get; private set; }
         public FrogForm FrogShape { get; private set; }
+        public EnergyStone EnergyStone { get; private set; }
 
 
         void Awake()
@@ -35,6 +36,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             State = GetComponent<PlayerState>();
             Visual = GetComponent<PlayerVisual>();
             FrogShape = GetComponent<FrogForm>();
+            EnergyStone = GetComponent<EnergyStone>();
         }
     }
 }

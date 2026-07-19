@@ -122,7 +122,6 @@ namespace FirstDungeon.Scripts.PlayerScripts
             _state = ShootingState.Charged;
             Destroy(_blank);
             _blank = Instantiate(_bigBlank, SpawnPosition, Quaternion.identity);
-            _chargingRoutine = null;
         }
 
         void CancelCharge()

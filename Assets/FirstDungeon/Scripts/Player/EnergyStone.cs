@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class EnergyStone : MonoBehaviour
 {
-    [SerializeField] int _charges;
+    [SerializeField] int _fullCharges;
+    [SerializeField] int _currentCharges;
     [SerializeField] int _healAmount;
     [SerializeField] int _replenishAmount;
     [SerializeField] float _healTime;
@@ -34,13 +35,18 @@ public class EnergyStone : MonoBehaviour
 
     public void GainCharge(int amount)
     {
-        _charges += amount;
+        _currentCharges += amount;
+    }
+
+    public void RefillFullCharges()
+    {
+        if (_currentCharges < _fullCharges) _currentCharges = _fullCharges;
     }
 
     void Cast()
     {
         if (!State.CanDo(PlayerState.PlayerAction.CastStone)) return;
-        if (_charges <= 0) return;
+        if (_currentCharges <= 0) return;
         
         switch (InputManager.Instance.IsAltHeld)
         {
@@ -60,7 +66,7 @@ public class EnergyStone : MonoBehaviour
 
     IEnumerator HealRoutine()
     {
-        _charges -= 1;
+        _currentCharges -= 1;
         
         State.SetActing(true);
         State.SetRooted(true);
@@ -86,9 +92,9 @@ public class EnergyStone : MonoBehaviour
 
         float t = _replenishTime;
         
-        while (InputManager.Instance.IsCastHeld && _charges > 0)
+        while (InputManager.Instance.IsCastHeld && _currentCharges > 0)
         {
-            _charges -= 1;
+            _currentCharges -= 1;
             
             while (InputManager.Instance.IsCastHeld && t > 0)
             {
