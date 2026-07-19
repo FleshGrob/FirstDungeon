@@ -9,7 +9,10 @@ namespace FirstDungeon.Scripts.PlayerScripts
         public int MaxHealth { get; private set; } = 6;
         public int CurrentHealth { get; private set; } = 6;
         
+        public bool FullHealth => CurrentHealth == MaxHealth;
+        
         public event Action OnHealthChanged;
+        public event Action OnDamaged;
 
         public int TakeDamage(Damage damage)
         {
@@ -34,11 +37,11 @@ namespace FirstDungeon.Scripts.PlayerScripts
             }
             
             CurrentHealth -= damage.Amount;
-            if (damage.StunDuration > 0) 
-                Player.Instance.State.Stun(damage.StunDuration);
+            if (damage.StunDuration > 0) Player.Instance.State.Stun(damage.StunDuration);
 
             Player.Instance.State.SetInvulnerable();
             
+            OnDamaged?.Invoke();
             OnHealthChanged?.Invoke();
             Debug.Log($"PlayerHealth: {CurrentHealth} / {MaxHealth}");
             return damage.Amount;

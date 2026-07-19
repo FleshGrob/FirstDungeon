@@ -65,8 +65,8 @@ public class FrogForm : MonoBehaviour
     void Start()
     {
         InputManager.Instance.OnShootKeyPressed += Attack;
-        InputManager.Instance.OnShapeshiftPressed += Shapeshift;
-        InputManager.Instance.OnAbilityPressed += HookShot;
+        InputManager.Instance.OnShapeshiftKeyPressed += ShapeshiftKey;
+        InputManager.Instance.OnAbilityKeyPressed += HookShot;
         Player.Instance.State.OnStunned += StopHooking;
     }
 
@@ -83,13 +83,13 @@ public class FrogForm : MonoBehaviour
         if (InputManager.Instance != null)
         {
             InputManager.Instance.OnShootKeyPressed -= Attack;
-            InputManager.Instance.OnShapeshiftPressed -= Shapeshift;
-            InputManager.Instance.OnAbilityPressed -= HookShot;
+            InputManager.Instance.OnShapeshiftKeyPressed -= ShapeshiftKey;
+            InputManager.Instance.OnAbilityKeyPressed -= HookShot;
             Player.Instance.State.OnStunned -= StopHooking;
         }
     }
 
-    void Shapeshift()
+    void ShapeshiftKey()
     {
         if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Shapeshift)) return;
         

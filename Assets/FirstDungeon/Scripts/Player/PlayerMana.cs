@@ -5,6 +5,8 @@ public class PlayerMana : MonoBehaviour
 {
     public int MaxMana { get; private set; } = 12;
     public int CurrentMana { get; private set; } = 12;
+
+    public bool FullMana => CurrentMana == MaxMana;
     
     public event Action OnManaChanged;
 
@@ -30,7 +32,7 @@ public class PlayerMana : MonoBehaviour
         Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
-    public void Restore(int amount)
+    public void Replenish(int amount)
     {
         CurrentMana += amount;
         if (CurrentMana > MaxMana) CurrentMana = MaxMana;
@@ -39,7 +41,7 @@ public class PlayerMana : MonoBehaviour
         Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
-    public void RestoreFull()
+    public void ReplenishFull()
     {
         CurrentMana = MaxMana;
         OnManaChanged?.Invoke();

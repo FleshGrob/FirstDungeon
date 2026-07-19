@@ -85,7 +85,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             _playerMana.Spend(_chargedManaCost);
             
             Projectile projectile = Instantiate(_bigProjectile, SpawnPosition, Quaternion.identity);
-            projectile.Launch(Direction, _projectileSpeed, _normalDamage * 3, () => Player.Instance.Mana.Restore(_chargedManaCost));
+            projectile.Launch(Direction, _projectileSpeed, _normalDamage * 3, () => Player.Instance.Mana.Replenish(_chargedManaCost));
         }
 
         void Charge()
