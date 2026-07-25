@@ -26,12 +26,12 @@ namespace FirstDungeon.Scripts.PlayerScripts
         [Header("Stats")]
         [SerializeField] int _normalDamage;
         [SerializeField] float _projectileSpeed;
+        [SerializeField] float _spawnOffset = 0.6f;
         
         [SerializeField] float _chargeTime;
         [SerializeField] int _normalManaCost;
         [SerializeField] int _chargedManaCost;
         
-        const float SpawnOffset = 0.6f;
         PlayerMovement _playerMovement;
         PlayerMana _playerMana;
         Coroutine _chargingRoutine;
@@ -39,7 +39,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
         GameObject _blank;
 
         Vector2 Direction => _playerMovement.Facing;
-        Vector2 SpawnPosition => _playerMovement.Rb.position + Direction * SpawnOffset;
+        Vector2 SpawnPosition => _playerMovement.Rb.position + Direction * _spawnOffset;
 
         void Awake()
         {

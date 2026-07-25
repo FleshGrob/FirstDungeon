@@ -8,6 +8,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] float _speed;
+        [SerializeField] float _facingThreshold;
         
         Vector2 _movementInput;
         Coroutine _drownRoutine;
@@ -31,18 +32,21 @@ namespace FirstDungeon.Scripts.PlayerScripts
 
         void Update()
         {
-            float ax = Mathf.Abs(_movementInput.x);
-            float ay = Mathf.Abs(_movementInput.y);
-
-            if (ax > ay) Facing = _movementInput.x > 0 ? Vector2.right : Vector2.left;
-            else if (ay > ax) Facing = _movementInput.y > 0 ? Vector2.up : Vector2.down;
-
             if (!Player.Instance.State.IsInBog && Player.Instance.State.IsSafe) SafePosition = Rb.position;
+            
+            if (_movementInput.magnitude > _facingThreshold)
+            {
+                float ax = Mathf.Abs(_movementInput.x);
+                float ay = Mathf.Abs(_movementInput.y);
+
+                if (ax > ay) Facing = _movementInput.x > 0 ? Vector2.right : Vector2.left;
+                else if (ay > ax) Facing = _movementInput.y > 0 ? Vector2.up : Vector2.down;
+            }
         }
 
         void FixedUpdate()
         {
-            Vector2 playerVelocity = _speed * _movementInput.normalized;
+            Vector2 playerVelocity = _speed * _movementInput;
             
             if (!Player.Instance.State.CanDo(PlayerState.PlayerAction.Move))
             {

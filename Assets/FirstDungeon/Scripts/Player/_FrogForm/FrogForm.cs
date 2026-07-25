@@ -1,3 +1,4 @@
+
 using System.Collections;
 using FirstDungeon.Scripts.Managers;
 using FirstDungeon.Scripts.PlayerScripts;
@@ -36,9 +37,10 @@ public class FrogForm : MonoBehaviour
     
     float _punchTimer;
     float _seriesActivityTimer;
+    float _tongueLength;
+    Vector2 _anchorPosition;
     
     Rigidbody2D _rb;
-    CapsuleCollider2D _col;
     SpriteRenderer _sR;
     SpriteRenderer _tongueSr;
     Sprite _originalSprite;
@@ -50,13 +52,12 @@ public class FrogForm : MonoBehaviour
     GameObject _punch;
     
     Vector2 Direction => Player.Instance.Movement.Facing;
-    Vector2 PunchSpawnPosition => Player.Instance.Movement.Rb.position + new Vector2(0, -_verticalOffset) + Direction * _spawnOffset;
+    Vector2 PunchSpawnPosition => (Vector2)Player.Instance.Transform.position + new Vector2(0, -_verticalOffset) + Direction * _spawnOffset;
     
     
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _col = GetComponent<CapsuleCollider2D>();
         _sR  = GetComponent<SpriteRenderer>();
         _originalSprite = _sR.sprite;
         _tongueSr = _frogTongue.GetComponent<SpriteRenderer>();
@@ -74,6 +75,16 @@ public class FrogForm : MonoBehaviour
     {
         _punchTimer -= Time.fixedDeltaTime;
         _seriesActivityTimer -= Time.fixedDeltaTime;
+    }
+
+    void LateUpdate()
+    {
+        if (_currentState == HookingState.Flying)
+        {
+            float distance = Vector2.Distance(Player.Instance.Transform.position, _anchorPosition);
+            _tongueSr.size = new Vector2(_tongueSr.size.x, distance);
+        }
+        else _tongueSr.size = new Vector2(_tongueSr.size.x, _tongueLength);
         
         if (_punch != null) _punch.transform.position = PunchSpawnPosition;
     }
@@ -85,8 +96,9 @@ public class FrogForm : MonoBehaviour
             InputManager.Instance.OnShootKeyPressed -= Attack;
             InputManager.Instance.OnShapeshiftKeyPressed -= ShapeshiftKey;
             InputManager.Instance.OnAbilityKeyPressed -= HookShot;
-            Player.Instance.State.OnStunned -= StopHooking;
         }
+        
+        if (Player.Instance != null) Player.Instance.State.OnStunned -= StopHooking;
     }
 
     void ShapeshiftKey()
@@ -135,7 +147,7 @@ public class FrogForm : MonoBehaviour
         float length = 0;
         float distance = _hookRange;
         
-        RaycastHit2D hookHit = default;
+        RaycastHit2D hookHit;
         HookAnchor hookAnchor = null;
         float previousDistance = 0;
         
@@ -145,9 +157,9 @@ public class FrogForm : MonoBehaviour
             progress = Mathf.Clamp01(progress);
             length = progress * _hookRange;
             
-            _tongueSr.size = new Vector2(_tongueSr.size.x, length);
+            _tongueLength = length;
             
-            hookHit = Physics2D.Raycast(transform.position, Player.Instance.Movement.Facing, length, _includedLayers);
+            hookHit = Physics2D.Raycast(_rb.position, Player.Instance.Movement.Facing, length, _includedLayers);
             
             if (hookHit.collider != null)
             {
@@ -155,7 +167,12 @@ public class FrogForm : MonoBehaviour
                 hookAnchor = hookHit.collider.GetComponent<HookAnchor>();
             }
             
-            if (hookAnchor != null) _currentState = HookingState.Flying;
+            if (hookAnchor != null)
+            {
+                _currentState = HookingState.Flying;
+                _anchorPosition = hookHit.point;
+            }
+            
             if (_pullable != null)
             {
                 _currentState = HookingState.Pulling;
@@ -170,9 +187,7 @@ public class FrogForm : MonoBehaviour
         
         while (_currentState == HookingState.Flying && distance > _flyingOffset)
         {
-            Vector2 target = hookHit.point;
-            
-            distance = Vector2.Distance(_rb.position, target);
+            distance = Vector2.Distance(_rb.position, _anchorPosition);
             
             if (distance == previousDistance)
             {
@@ -180,11 +195,9 @@ public class FrogForm : MonoBehaviour
                 yield break;
             }
             
-            Vector2 newPosition = Vector2.MoveTowards(_rb.position, target, _flyingSpeed * Time.fixedDeltaTime);
+            Vector2 newPosition = Vector2.MoveTowards(_rb.position, _anchorPosition, _flyingSpeed * Time.fixedDeltaTime);
         
             _rb.MovePosition(newPosition);
-            
-            _tongueSr.size = new Vector2(_tongueSr.size.x, distance);
             
             previousDistance = distance;
             
@@ -210,8 +223,8 @@ public class FrogForm : MonoBehaviour
                 StopHooking();
                 yield break;
             }
-            
-            _tongueSr.size = new Vector2(_tongueSr.size.x, distance);
+
+            _tongueLength = distance;
             
             previousDistance = distance;
             
@@ -224,14 +237,14 @@ public class FrogForm : MonoBehaviour
             progress = Mathf.Clamp01(progress);
             length = progress * _hookRange;
             
-            _tongueSr.size = new Vector2(_tongueSr.size.x, length);
+            _tongueLength  = length;
             
             yield return new WaitForFixedUpdate();
         }
         
         InputManager.Instance.UnBlockGameplay();
 
-        _tongueSr.size = new Vector2(_tongueSr.size.x, 0);
+        _tongueLength = 0;
         _currentState = HookingState.Idle;
         _targetTransform  = null;
         _pullable  = null;
@@ -251,7 +264,7 @@ public class FrogForm : MonoBehaviour
         _targetTransform  = null;
         _pullable = null;
         _hookingRoutine  = null;
-        _tongueSr.size = new Vector2(_tongueSr.size.x, 0);
+        _tongueLength = 0;
         _currentState = HookingState.Idle;
     }
 }
