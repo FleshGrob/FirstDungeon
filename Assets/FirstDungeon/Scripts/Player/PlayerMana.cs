@@ -14,7 +14,6 @@ public class PlayerMana : MonoBehaviour
     void Awake()
     {
         CurrentMana = MaxMana;
-        Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
     public bool Has(int amount)
@@ -28,8 +27,6 @@ public class PlayerMana : MonoBehaviour
         
         CurrentMana -= amount;
         OnManaChanged?.Invoke();
-        
-        Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
     public void Replenish(int amount)
@@ -38,7 +35,6 @@ public class PlayerMana : MonoBehaviour
         if (CurrentMana > MaxMana) CurrentMana = MaxMana;
         
         OnManaChanged?.Invoke();
-        Debug.Log($"PlayerMana: {CurrentMana} / {MaxMana}");
     }
 
     public void ReplenishFull()

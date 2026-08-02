@@ -43,7 +43,7 @@ namespace FirstDungeon.Scripts.PlayerScripts
             
             OnDamaged?.Invoke();
             OnHealthChanged?.Invoke();
-            Debug.Log($"PlayerHealth: {CurrentHealth} / {MaxHealth}");
+            
             return damage.Amount;
         }
 
