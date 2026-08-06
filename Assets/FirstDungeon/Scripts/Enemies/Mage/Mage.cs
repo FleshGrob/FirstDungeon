@@ -35,18 +35,17 @@ public class Mage : Enemy
     
     public override void BasicAttack()
     {
-        StartCoroutine(CastingProjectileRoutine());
+        StartActing(CastingProjectileRoutine());
     }
 
     public override void SpecialAttack()
     {
-        StartCoroutine(CastingExplosionRoutine());
+        StartActing(CastingExplosionRoutine());
     }
 
     public override void Defense()
     {
         if (IsActing) return;
-        IsActing = true;
         StartCoroutine(TeleportRoutine());
     }
 
@@ -54,13 +53,21 @@ public class Mage : Enemy
     {
         IsActing  = true;
         float t = Config.BasicAttackCastTime;
-        while (t > 0)
+        
+        try
         {
-            t -= Time.deltaTime;
-            yield return null;
+            while (t > 0)
+            {
+                t -= Time.deltaTime;
+                yield return null;
+            }
+
+            LaunchProjectile();
         }
-        LaunchProjectile();
-        IsActing = false;
+        finally
+        {
+            IsActing = false;
+        }
     }
     
     void LaunchProjectile()
@@ -78,18 +85,27 @@ public class Mage : Enemy
         Vector2 targetPosition = Player.Instance.Transform.position;
         GameObject explosionTelegraph = Instantiate(_explosionTelegraph, targetPosition, Quaternion.identity);
         float t = Config.SpecialAttackCastTime;
-        while (t > 0)
+        
+        try
         {
-            t -= Time.deltaTime;
-            yield return null;
+            while (t > 0)
+            {
+                t -= Time.deltaTime;
+                yield return null;
+            }
+
+            Instantiate(_explosionPrefab, targetPosition, Quaternion.identity);
         }
-        Instantiate(_explosionPrefab, targetPosition, Quaternion.identity);
-        Destroy(explosionTelegraph);
-        IsActing = false;
+        finally
+        {
+            Destroy(explosionTelegraph);
+            IsActing = false;
+        }
     }
 
     IEnumerator TeleportRoutine()
     {
+        IsActing = true;
         _sr.enabled = false;
         _col.enabled = false;
         

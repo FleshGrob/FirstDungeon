@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using FirstDungeon.Scripts.Enemies.General;
 using FirstDungeon.Scripts.Enemies.General.EnemyStates;
@@ -5,6 +6,7 @@ using FirstDungeon.Scripts.OtherScripts;
 using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 
 public abstract class Enemy : MonoBehaviour, IPullable
@@ -22,6 +24,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     protected Collider2D _col;
     protected SpriteRenderer _sr;
     protected Coroutine _pullRoutine;
+    protected IEnumerator _actingEnumerator;
     EnemyHealth _health;
     Color _originalColor;
 
@@ -143,12 +146,35 @@ public abstract class Enemy : MonoBehaviour, IPullable
         yield return new WaitForSeconds(_hurtTime);
         _sr.color = _originalColor;
     }
-    
-    void Die()
+
+    void SetStunned(bool value)
     {
-        Instantiate(_corpsePrefab, transform.position, _corpsePrefab.transform.rotation);
-        Instantiate(_energyDropPrefab, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        if (value)
+        {
+            _isStunned = true;
+            Agent.enabled = false;
+            StopActing();
+        }
+        else
+        {
+            _isStunned = false;
+            Agent.enabled = true;
+        }
+    }
+    
+    protected void StartActing(IEnumerator routine)
+    {
+        StopActing();
+        _actingEnumerator = routine;
+        StartCoroutine(routine);
+    }
+
+    protected void StopActing()
+    {
+        if (_actingEnumerator == null) return;
+        StopCoroutine(_actingEnumerator);
+        (_actingEnumerator as IDisposable)?.Dispose();
+        _actingEnumerator = null;
     }
     
     public void Pull(Vector2 frogPosition, float speed, float offset)
@@ -158,8 +184,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
 
     IEnumerator PullingRoutine(Vector2 frogPosition, float speed, float offset)
     {
-        Agent.enabled = false;
-        _isStunned = true;
+        SetStunned(true);
         IsInAir = true;
         _rb.bodyType = RigidbodyType2D.Dynamic;
             
@@ -178,9 +203,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
 
         _rb.linearVelocity = Vector2.zero;
         _rb.bodyType = RigidbodyType2D.Kinematic;
-        _isStunned = false;
         IsInAir = false;
-        Agent.enabled = true;
+        SetStunned(false);
     }
 
     public void CancelPulling()
@@ -190,10 +214,18 @@ public abstract class Enemy : MonoBehaviour, IPullable
             StopCoroutine(_pullRoutine);
             _rb.linearVelocity = Vector2.zero;
             _rb.bodyType = RigidbodyType2D.Kinematic;
-            _isStunned = false;
-            Agent.enabled = true;
+            IsInAir = false;
+            SetStunned(false);
             _pullRoutine = null;
         }
+    }
+    
+    void Die()
+    {
+        StopActing();
+        Instantiate(_corpsePrefab, transform.position, _corpsePrefab.transform.rotation);
+        Instantiate(_energyDropPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
     
     public bool IsPlayerInRoom() => RoomCol.OverlapPoint(Player.Instance.Transform.position);
