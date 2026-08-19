@@ -52,13 +52,13 @@ public class Mage : Enemy
     IEnumerator CastingProjectileRoutine()
     {
         IsActing  = true;
-        float t = Config.BasicAttackCastTime;
+        CastTimeLeft = Config.BasicAttackCastTime;
         
         try
         {
-            while (t > 0)
+            while (CastTimeLeft > 0)
             {
-                t -= Time.deltaTime;
+                CastTimeLeft -= Time.deltaTime;
                 yield return null;
             }
 
@@ -84,13 +84,13 @@ public class Mage : Enemy
         IsActing  = true;
         Vector2 targetPosition = Player.Instance.Transform.position;
         GameObject explosionTelegraph = Instantiate(_explosionTelegraph, targetPosition, Quaternion.identity);
-        float t = Config.SpecialAttackCastTime;
+        CastTimeLeft = Config.SpecialAttackCastTime;
         
         try
         {
-            while (t > 0)
+            while (CastTimeLeft > 0)
             {
-                t -= Time.deltaTime;
+                CastTimeLeft -= Time.deltaTime;
                 yield return null;
             }
 

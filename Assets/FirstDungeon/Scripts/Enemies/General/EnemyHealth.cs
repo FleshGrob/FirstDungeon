@@ -1,6 +1,5 @@
 using System;
 using FirstDungeon.Scripts.OtherScripts;
-using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 using UnityEngine.AI;
 

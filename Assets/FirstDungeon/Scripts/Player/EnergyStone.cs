@@ -14,6 +14,9 @@ public class EnergyStone : MonoBehaviour
     
     Coroutine _castRoutine;
     
+    public bool IsHealing { get; private set; } // нужно только для плейтестов
+    public bool IsReplenishing { get; private set; } // нужно только для плейтестов
+        
     PlayerState State => Player.Instance.State;
     PlayerHealth Health => Player.Instance.Health;
     PlayerMana Mana => Player.Instance.Mana;
@@ -68,6 +71,7 @@ public class EnergyStone : MonoBehaviour
     {
         _currentCharges -= 1;
         
+        IsHealing = true;
         State.SetActing(true);
         State.SetRooted(true);
         
@@ -76,6 +80,7 @@ public class EnergyStone : MonoBehaviour
         
         State.SetActing(false);
         State.SetRooted(false);
+        IsHealing  = false;
         
         _castRoutine = null;
     }
@@ -87,6 +92,7 @@ public class EnergyStone : MonoBehaviour
 
     IEnumerator ReplenishRoutine()
     {
+        IsReplenishing = true;
         State.SetActing(true);
         State.SetRooted(true);
 
@@ -109,6 +115,7 @@ public class EnergyStone : MonoBehaviour
         
         State.SetActing(false);
         State.SetRooted(false);
+        IsReplenishing = false;
         
         _castRoutine = null;
     }
@@ -120,6 +127,8 @@ public class EnergyStone : MonoBehaviour
         StopCoroutine(_castRoutine);
         _castRoutine = null;
         
+        IsHealing = false;
+        IsReplenishing = false;
         State.SetActing(false);
         State.SetRooted(false);
     }

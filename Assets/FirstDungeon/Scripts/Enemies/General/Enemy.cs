@@ -38,6 +38,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     public GameObject Room { get; private set; }
     public bool IsInAir { get; private set; }
     public bool IsActing { get; protected set; }
+    public float CastTimeLeft  { get; protected set; }
     public Collider2D RoomCol { get; protected set; }
     public abstract EnemyConfig Config { get; }
     public LayerMask Obstacle => _obstacle;
@@ -49,7 +50,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
         
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<Collider2D>();
-        _sr  = GetComponentInChildren<SpriteRenderer>();
+        _sr  = GetComponent<SpriteRenderer>();
         _health = GetComponent<EnemyHealth>();
         Agent = GetComponent<NavMeshAgent>();
         StateMachine = new EnemyStateMachine();

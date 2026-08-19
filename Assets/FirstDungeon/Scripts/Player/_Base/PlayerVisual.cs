@@ -1,8 +1,11 @@
 using System;
+using FirstDungeon.Scripts.PlayerScripts;
 using UnityEngine;
 
 public class PlayerVisual : MonoBehaviour
 {
+    [SerializeField] Color _healColor;
+    [SerializeField] Color _replenishColor;
     [SerializeField] Color _stunnedColor;
     [SerializeField] Color _invulnerableColor;
     
@@ -10,6 +13,7 @@ public class PlayerVisual : MonoBehaviour
     Sprite _playerSprite;
     Color _playerColor;
 
+    EnergyStone _energyStone => Player.Instance.EnergyStone;
 
     void Awake()
     {
