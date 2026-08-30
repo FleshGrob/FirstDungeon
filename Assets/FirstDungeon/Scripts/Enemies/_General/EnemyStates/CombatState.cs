@@ -23,21 +23,19 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
             
             float dist = Vector2.Distance(_enemy.transform.position, Player.Instance.Transform.position);
 
-            if (dist > _enemy.Config.AttackRange)
-            {
-                _enemy.StateMachine.ChangeState(new ChaseState(_enemy));
-                return;
-            }
-
-            if (_enemy.BasicAttackTimer <= 0)
+            if (_enemy.BasicAttackTimer <= 0 && dist <= _enemy.Config.BasicAttackRange)
             {
                 _enemy.BasicAttack();
                 _enemy.ResetBasicTimer();
             }
-            else if (_enemy.SpecialAttackTimer <= 0)
+            else if (_enemy.SpecialAttackTimer <= 0 && dist <= _enemy.Config.SpecialAttackRange)
             {
                 _enemy.SpecialAttack();
                 _enemy.ResetSpecialTimer();
+            }
+            else if (dist > Mathf.Min(_enemy.Config.BasicAttackRange, _enemy.Config.SpecialAttackRange))
+            {
+                _enemy.StateMachine.ChangeState(new ChaseState(_enemy));
             }
         }
         

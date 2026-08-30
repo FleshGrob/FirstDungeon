@@ -16,18 +16,19 @@ public abstract class EnemyConfig : ScriptableObject
 
     [Header("Chase")]
     public float ChaseMoveSpeed;
-    public float AttackRange;
-
+    
     [Header("Basic Attack")]
     public float BasicAttackCooldown;
     public float BasicAttackCastTime;
     public int BasicAttackDamage;
+    public float BasicAttackRange;
 
     [Header("Special Attack")]
     public float SpecialAttackCooldownMin;
     public float SpecialAttackCooldownMax;
     public float SpecialAttackCastTime;
     public int SpecialAttackDamage;
+    public float SpecialAttackRange;
 
     [Header("Defense")]
     public float DefenseCooldown;

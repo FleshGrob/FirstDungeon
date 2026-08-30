@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e410b782e1045a19665d32ee98a439, type: 3}
+  m_Name: BogCreatureConfig
+  m_EditorClassIdentifier: Assembly-CSharp::BogConfig
+  Hp: 27
+  PatrolRadius: 2
+  PatrolIdleTimeMin: 2
+  PatrolIdleTimeMax: 4
+  PatrolMoveSpeed: 0.5
+  AggroRadius: 6
+  ChaseMoveSpeed: 1
+  BasicAttackCooldown: 0
+  BasicAttackCastTime: 0
+  BasicAttackDamage: 1
+  BasicAttackRange: 2.25
+  SpecialAttackCooldownMin: 0
+  SpecialAttackCooldownMax: 0
+  SpecialAttackCastTime: 0
+  SpecialAttackDamage: 1
+  SpecialAttackRange: 5
+  DefenseCooldown: 5
+  ProjectileDetectRadius: 2
+  PlayerProximityRadius: 0
+  PlayerProximityCooldown: 0

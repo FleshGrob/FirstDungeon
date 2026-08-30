@@ -28,7 +28,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     EnemyHealth _health;
     Color _originalColor;
 
-    public Transform PullTransform { get; private set; }
+    
     public float BasicAttackTimer { get; private set; }
     public float SpecialAttackTimer { get; private set; }
     public EnemyStateMachine StateMachine { get; private set; }
@@ -40,6 +40,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
     public bool IsActing { get; protected set; }
     public float CastTimeLeft  { get; protected set; }
     public Collider2D RoomCol { get; protected set; }
+    public Transform PullTransform { get; private set; }
+    public bool IsShielded { get; private set; }
     public abstract EnemyConfig Config { get; }
     public LayerMask Obstacle => _obstacle;
     
@@ -126,8 +128,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
             Projectile projectile = hit.GetComponent<Projectile>();
             if (projectile == null) continue;
             
-            Vector2 toMage = (Vector2)transform.position - (Vector2)projectile.transform.position;
-            float dot = Vector2.Dot(projectile.Rb.linearVelocity, toMage);
+            Vector2 toEnemy = (Vector2)transform.position - (Vector2)projectile.transform.position;
+            float dot = Vector2.Dot(projectile.Rb.linearVelocity, toEnemy);
             if (dot > 0)
                 return true;
         }
@@ -147,6 +149,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
         yield return new WaitForSeconds(_hurtTime);
         _sr.color = _originalColor;
     }
+    
+    public void SetShielded(bool value) => IsShielded = value;
 
     void SetStunned(bool value)
     {
@@ -239,6 +243,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     
     
     
+    
     protected virtual void OnDrawGizmosSelected()
     {
         if (Config == null) return;
@@ -250,7 +255,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
         Gizmos.DrawWireSphere(transform.position, Config.AggroRadius);
     
         Gizmos.color = new Color(1f, 0.5f, 0f);
-        Gizmos.DrawWireSphere(transform.position, Config.AttackRange);
+        Gizmos.DrawWireSphere(transform.position, Config.BasicAttackRange);
+        Gizmos.DrawWireSphere(transform.position, Config.SpecialAttackRange);
     
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, Config.ProjectileDetectRadius);

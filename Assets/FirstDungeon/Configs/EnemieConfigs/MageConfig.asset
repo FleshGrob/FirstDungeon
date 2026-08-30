@@ -13,21 +13,22 @@ MonoBehaviour:
   m_Name: MageConfig
   m_EditorClassIdentifier: 
   Hp: 27
-  PatrolRadius: 2.5
+  PatrolRadius: 2
   PatrolIdleTimeMin: 2
   PatrolIdleTimeMax: 4
-  PatrolMoveSpeed: 1
+  PatrolMoveSpeed: 0.8
   AggroRadius: 6
-  ChaseMoveSpeed: 3
-  AttackRange: 6.5
+  ChaseMoveSpeed: 1
   BasicAttackCooldown: 2.5
   BasicAttackCastTime: 1
   BasicAttackDamage: 1
-  SpecialAttackCooldownMin: 4
-  SpecialAttackCooldownMax: 6
-  SpecialAttackCastTime: 1
-  SpecialAttackDamage: 2
-  DefenseCooldown: 4
+  BasicAttackRange: 0
+  SpecialAttackCooldownMin: 5
+  SpecialAttackCooldownMax: 7
+  SpecialAttackCastTime: 1.5
+  SpecialAttackDamage: 1
+  SpecialAttackRange: 0
+  DefenseCooldown: 5
   ProjectileDetectRadius: 2
   PlayerProximityRadius: 3
   PlayerProximityCooldown: 4

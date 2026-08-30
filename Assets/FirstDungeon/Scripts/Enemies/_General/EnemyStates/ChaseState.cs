@@ -21,7 +21,9 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
         {
             float dist = Vector2.Distance(_enemy.transform.position, Player.Instance.Transform.position);
 
-            if (dist < _enemy.Config.AttackRange)
+            if ((dist < _enemy.Config.BasicAttackRange && _enemy.BasicAttackTimer <= 0) ||
+                (dist < _enemy.Config.SpecialAttackRange && _enemy.SpecialAttackTimer <= 0) ||
+                dist < Mathf.Min(_enemy.Config.BasicAttackRange, _enemy.Config.SpecialAttackRange)) // эта строчка нужна для ренжевиков, чтобы не чейзили зазря
             {
                 _enemy.StateMachine.ChangeState(new CombatState(_enemy)); 
                 return;

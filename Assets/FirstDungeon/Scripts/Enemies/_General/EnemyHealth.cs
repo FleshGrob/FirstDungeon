@@ -22,6 +22,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public int TakeDamage(Damage damage)
     {
+        if (damage.DamageType == Damage.Type.Normal)
+        {
+            if (_enemy.IsShielded)
+            {
+                _enemy.SetShielded(false);
+                return 0;
+            }
+        }
+        
         if (damage.DamageType == Damage.Type.GroundHazard || damage.DamageType == Damage.Type.Bog)
         {
             if (_enemy.IsInAir) return 0;
