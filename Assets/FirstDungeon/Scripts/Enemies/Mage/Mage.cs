@@ -51,7 +51,8 @@ public class Mage : Enemy
 
     IEnumerator CastingProjectileRoutine()
     {
-        IsActing  = true;
+        IsActing = true;
+        _canWalk = false;
         CastTimeLeft = Config.BasicAttackCastTime;
         
         try
@@ -67,6 +68,7 @@ public class Mage : Enemy
         finally
         {
             IsActing = false;
+            _canWalk = true;
         }
     }
     
@@ -82,6 +84,7 @@ public class Mage : Enemy
     IEnumerator CastingExplosionRoutine()
     {
         IsActing  = true;
+        _canWalk = false;
         Vector2 targetPosition = Player.Instance.Transform.position;
         GameObject explosionTelegraph = Instantiate(_explosionTelegraph, targetPosition, Quaternion.identity);
         CastTimeLeft = Config.SpecialAttackCastTime;
@@ -100,12 +103,14 @@ public class Mage : Enemy
         {
             Destroy(explosionTelegraph);
             IsActing = false;
+            _canWalk = true;
         }
     }
 
     IEnumerator TeleportRoutine()
     {
         IsActing = true;
+        _canWalk = false;
         _sr.enabled = false;
         _col.enabled = false;
         
@@ -124,6 +129,7 @@ public class Mage : Enemy
         _sr.enabled = true;
         _col.enabled = true;
         IsActing = false;
+        _canWalk = true;
     }
 
     bool ShouldEscape()

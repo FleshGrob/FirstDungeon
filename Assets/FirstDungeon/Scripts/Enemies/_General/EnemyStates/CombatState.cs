@@ -19,21 +19,23 @@ namespace FirstDungeon.Scripts.Enemies.General.EnemyStates
 
         public void Tick()
         {
-            if (_enemy.IsActing) return;
-            
             float dist = Vector2.Distance(_enemy.transform.position, Player.Instance.Transform.position);
 
-            if (_enemy.BasicAttackTimer <= 0 && dist <= _enemy.Config.BasicAttackRange)
+            if (!_enemy.IsActing)
             {
-                _enemy.BasicAttack();
-                _enemy.ResetBasicTimer();
+                if (_enemy.BasicAttackTimer <= 0 && dist <= _enemy.Config.BasicAttackRange)
+                {
+                    _enemy.BasicAttack();
+                    _enemy.ResetBasicTimer();
+                }
+                else if (_enemy.SpecialAttackTimer <= 0 && dist <= _enemy.Config.SpecialAttackRange)
+                {
+                    _enemy.SpecialAttack();
+                    _enemy.ResetSpecialTimer();
+                }
             }
-            else if (_enemy.SpecialAttackTimer <= 0 && dist <= _enemy.Config.SpecialAttackRange)
-            {
-                _enemy.SpecialAttack();
-                _enemy.ResetSpecialTimer();
-            }
-            else if (dist > Mathf.Min(_enemy.Config.BasicAttackRange, _enemy.Config.SpecialAttackRange))
+            
+            if (dist > Mathf.Min(_enemy.Config.BasicAttackRange, _enemy.Config.SpecialAttackRange))
             {
                 _enemy.StateMachine.ChangeState(new ChaseState(_enemy));
             }

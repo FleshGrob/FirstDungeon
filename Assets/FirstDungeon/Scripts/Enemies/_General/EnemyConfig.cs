@@ -22,6 +22,7 @@ public abstract class EnemyConfig : ScriptableObject
     public float BasicAttackCastTime;
     public int BasicAttackDamage;
     public float BasicAttackRange;
+    public float BasicAttackDuration;
 
     [Header("Special Attack")]
     public float SpecialAttackCooldownMin;
@@ -29,6 +30,7 @@ public abstract class EnemyConfig : ScriptableObject
     public float SpecialAttackCastTime;
     public int SpecialAttackDamage;
     public float SpecialAttackRange;
+    public float SpecialAttackDuration;
 
     [Header("Defense")]
     public float DefenseCooldown;

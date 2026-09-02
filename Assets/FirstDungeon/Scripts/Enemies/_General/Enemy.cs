@@ -19,6 +19,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     
     float _hurtTime = 0.5f;
     float _defenseTimer;
+    protected bool _canWalk = true;
     
     protected Rigidbody2D _rb;
     protected Collider2D _col;
@@ -46,7 +47,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
     public LayerMask Obstacle => _obstacle;
     
     
-    void Awake()
+    protected virtual void Awake()
     {
         PullTransform = transform;
         
@@ -62,7 +63,7 @@ public abstract class Enemy : MonoBehaviour, IPullable
         HomePosition = transform.position;
     }
 
-    void Start()
+    protected virtual void Start()
     {
         StateMachine.ChangeState(new PatrolState(this));
         RoomCol = GetComponentInParent<CompositeCollider2D>();
@@ -109,6 +110,8 @@ public abstract class Enemy : MonoBehaviour, IPullable
 
     public void Move(Vector2 destination, float speed)
     {
+        if (!_canWalk) return;
+        
         Agent.isStopped = false;
         Agent.speed = speed;
         Agent.SetDestination(destination);
@@ -240,7 +243,6 @@ public abstract class Enemy : MonoBehaviour, IPullable
     public abstract void BasicAttack();
     public abstract void SpecialAttack();
     public abstract void Defense();
-    
     
     
     
